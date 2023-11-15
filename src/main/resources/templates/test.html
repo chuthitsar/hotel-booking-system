@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            color: #333;
+            background-color: #f8f8f8;
+            margin: 0;
+            padding: 0;
+        }
+        p, ul, li {
+            line-height: 1.6;
+        }
+        h4 {
+            color: #C18653;
+        }
+        b {
+            color: #C18653;
+        }
+        i {
+            color: #777;
+        }
+        a {
+            color: #C18653;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        .highlight {
+            background-color: #C18653;
+            color: #fff;
+            padding: 10px;
+            margin: 10px 0;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+    <p class="highlight">Dear <span th:text="${guestInfo.getName()}"></span>,</p>
+
+    <p>Your reservation at Our Hotel is confirmed. Confirmation number: <span th:text="${reservation.getReservationID()}"></span>.</p>
+
+    <h4>Here are your details:</h4>
+    <ul>
+        <li>Number of guests: <span th:text="${reservation.getNumberOfGuest()}"></span></li>
+        <li>Total room: <span th:text="${reservation.getTotalRoom()}"></span></li>
+        <li>Check-in date: <span th:text="${#dates.format(reservation.getCheckIn(), 'dd/MM/yyyy HH:mm:ss')}"></span></li>
+        <li>Check-out date: <span th:text="${#dates.format(reservation.getCheckOut(), 'dd/MM/yyyy HH:mm:ss')}"></span></li>
+        <li>Length of stay: <span th:text="${reservation.getLengthOfStay()}"></span></li>
+        <li>Total cost: <span th:text="${reservation.getTotalCost()}"></span></li>
+        <li>Special request: <span th:text="${reservation.getSpecialRequest()}"></span></li>
+    </ul>
+
+    <h4>Bank Account Information for payment:</h4>
+    <ul>
+        <li>Bank Name: AAA Bank</li>
+        <li>Account Holder: Nextel Hotel</li>
+        <li>Account Number: 1234567890</li>
+        <li>SWIFT/BIC Code: ABCDEFGH (if applicable)</li>
+        <li>IBAN (if applicable): DE89370400440532013000</li>
+    </ul>
+
+    <b>Please ensure that you make the payment promptly and use the provided bank account information 
+    for the transaction. Once the payment has been successfully processed, kindly send a confirmation email to 
+    <a href="mailto:hotel@gmail.com">hotel@gmail.com</a> or <a href="https://www.facebook.com/ourhotel">our Facebook page chat box</a> along with the payment transaction reference and the Reservation ID. 
+    </b>
+
+    <b>You are kindly requested to settle the total cost of your reservation within the next 24 hours from the date of this notice. 
+    Failure to make the payment within this stipulated timeframe will result in the automatic cancellation of your reservation.</b>
+    <br>    
+    <p>Should you have any questions or require further assistance, please do not hesitate to contact our reservations team at <i><a href="mailto:hotel@gmail.com">hotel@gmail.com</a></i>.</p>
+    <i>Thank you for choosing our hotel for your stay.</i>
+
+    <p>Best regards,<br>Hotel</p>
+</body>
+</html>

@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<p>Dear <span th:text="${guestInfo.name}"></span>,</p>
+
+<p>Your reservation at Our Hotel has been cancelled. ReservationID: <span th:text="${reservation.reservationID}"></span>.</p>
+
+<p>We regret to inform you that your reservation has been canceled due to the expiration of your reservation.</p>
+
+<h4>Reservation Details:</h4>
+<ul>
+    <li>Reservation ID: <span th:text="${reservation.reservationID}"></span></li>
+    <li>Guest Name: <span th:text="${guestInfo.name}"></span></li>
+    <li>Check-in date: <span th:text="${#dates.format(reservation.checkIn, 'dd/MM/yyyy HH:mm:ss')}"></span></li>
+    <li>Check-out date: <span th:text="${#dates.format(reservation.checkOut, 'dd/MM/yyyy HH:mm:ss')}"></span></li>
+</ul>
+
+<p>We're sorry to see you go and we hope to see you again in the future.</p>
+
+<p>If you have any questions or need further assistance, please reply to this email.</p>
+
+<p>Best regards,<br>Hotel</p>
+</body>
+</html>

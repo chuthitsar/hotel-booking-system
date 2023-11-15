@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<p>Dear <span th:text="${guestInfo.name}"></span>,</p>
+
+<p>Your payment for the reservation at Our Hotel is confirmed. ReservationID: <span th:text="${reservation.reservationID}"></span>.</p>
+
+<p>Here are your details:</p>
+<ul>
+    <li>Total cost: $ <span th:text="${reservation.totalCost}"></span></li>
+    <li>Payment date: <span th:text="${#dates.format(reservation.lastModifiedAt, 'dd/MM/yyyy HH:mm:ss')}"></span></li>
+</ul>
+
+<p>You can make changes to your reservation or ask us a question by replying to this email.</p>
+
+<p>Best regards,<br>Hotel</p>
+</body>
+</html>
