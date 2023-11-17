@@ -30,4 +30,8 @@ public interface RoomService {
 
 	public void maintainRoom(Long id, Boolean isMaintained);
 
+	public Long countAvailableRooms();
+
+	public Long countOccupiedRooms();
+
 }

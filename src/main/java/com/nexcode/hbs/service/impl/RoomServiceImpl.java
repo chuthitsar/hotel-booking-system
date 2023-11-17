@@ -310,4 +310,18 @@ public class RoomServiceImpl implements RoomService {
 		
 	}
 
+	@Override
+	public Long countAvailableRooms() {
+		
+		Long roomCount = roomRepository.countByStatus(RoomStatus.AVAILABLE);
+		return roomCount;
+	}
+
+	@Override
+	public Long countOccupiedRooms() {
+		
+		Long roomCount = roomRepository.countByStatus(RoomStatus.OCCUPIED);
+		return roomCount;
+	}
+
 }

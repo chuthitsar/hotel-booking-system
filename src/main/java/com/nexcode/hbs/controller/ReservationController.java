@@ -103,14 +103,7 @@ public class ReservationController {
 		}
 	}
 	
-	//// Getting all reservations, each of which status is PENDING or CONFIRMED ////
-	@GetMapping("/new-reservations")
-	public ResponseEntity<List<ReservationResponse>> getNewReservations() {
-		List<ReservationDto> reservationDtos = reservationService.getNewReservations();
-		return ResponseEntity.ok(reservationMapper.mapToResponse(reservationDtos));
-	}
-	
-	//// Getting count of all pending and confirmed reservations ////
+	//// Getting count of all pending reservations ////
 	@GetMapping("/count")
 	public ResponseEntity<Long> countNewReservations() {
 		Long reservationCount = reservationService.countNewReservations();

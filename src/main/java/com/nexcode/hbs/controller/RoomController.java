@@ -99,4 +99,16 @@ public class RoomController {
 						"Checked out the Room Successfully."),
 				HttpStatus.OK);
 	}
+	
+	@GetMapping("/available-count")
+	public ResponseEntity<Long> countAvailableRooms() {
+		Long roomCount = roomService.countAvailableRooms();
+		return ResponseEntity.ok(roomCount);
+	}
+	
+	@GetMapping("/occupation-count")
+	public ResponseEntity<Long> countOccupiedRooms() {
+		Long roomCount = roomService.countOccupiedRooms();
+		return ResponseEntity.ok(roomCount);
+	}
 }

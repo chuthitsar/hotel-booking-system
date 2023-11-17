@@ -286,16 +286,9 @@ public class ReservationServiceImpl implements ReservationService {
 	}
 	
 	@Override
-	public List<ReservationDto> getNewReservations() {
-		
-		List<Reservation> reservations = reservationRepository.findNew();
-		return reservationMapper.mapToDto(reservations);
-	}
-	
-	@Override
 	public Long countNewReservations() {
 		
-		Long reservationCount = reservationRepository.findNewCount();
+		Long reservationCount = reservationRepository.countByStatus(ReservationStatus.PENDING);
 		return reservationCount;
 	}
 	

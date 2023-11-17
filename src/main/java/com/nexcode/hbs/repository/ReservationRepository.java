@@ -19,14 +19,10 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
 	Optional<List<Reservation>> findByCreatedAtBetween(Instant startOfMonth, Instant endOfMonth);
 
 	List<Reservation> findByStatusAndCreatedAtBetween(ReservationStatus status, Instant startOfMonth, Instant endOfMonth);
-	
-	@Query("SELECT DISTINCT r FROM Reservation r "
-			+ "WHERE r.status IN ('PENDING', 'CONFIRMED')")
-	List<Reservation> findNew();
 
-	@Query("SELECT COUNT(r) FROM Reservation r "
-			+ "WHERE r.status IN ('PENDING', 'CONFIRMED')")
-	Long findNewCount();
+//	@Query("SELECT COUNT(r) FROM Reservation r "
+//			+ "WHERE r.status IN ('PENDING', 'CONFIRMED')")
+//	Long findNewCount();
 
 	@Query("SELECT new com.nexcode.hbs.model.response.DailyIncomeForMonthResponse(DATE(r.createdAt) as date, SUM(r.totalCost) as income) FROM Reservation r "
 			+ "WHERE MONTH(r.createdAt) = :month " + "and YEAR(r.createdAt) = :year "
@@ -56,4 +52,6 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
 			@Param("checkOutDate") Instant checkOutDate);
 
 	Optional<Reservation> findByReservationID(String reservationId);
+
+	Long countByStatus(ReservationStatus status);
 }

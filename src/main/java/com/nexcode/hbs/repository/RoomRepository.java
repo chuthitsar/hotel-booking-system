@@ -79,4 +79,6 @@ public interface RoomRepository extends JpaRepository<Room, Long> {
 	            + "AND (:checkIn <= o.checkOut AND :checkOut >= o.checkIn))")
 	List<Room> findAvailableRoomsByDate(Instant checkIn, Instant checkOut);
 
+	Long countByStatus(RoomStatus available);
+
 }

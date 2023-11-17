@@ -30,8 +30,6 @@ public interface ReservationService {
 	List<ReservationDto> getReservationsWithFilters(String status, YearMonth createdAtMonth, Instant reservationDate, Instant checkInDate,
 			Instant checkOutDate);
 	
-	List<ReservationDto> getNewReservations();
-	
 	List<DailyIncomeForMonthResponse> getDailyIncomeForMonth(Integer month, Integer year);
 
 	Long countNewReservations();
