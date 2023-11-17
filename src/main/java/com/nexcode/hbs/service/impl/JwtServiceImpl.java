@@ -6,7 +6,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Service;
@@ -23,11 +22,9 @@ import io.jsonwebtoken.security.Keys;
 @Service
 public class JwtServiceImpl implements JwtService{
 	
-	@Value("${application.jwt.secretKey}")
-	private String SECRET_KEY;
+	private final String SECRET_KEY = "HotelBookingSystemSecretKeyHotelBookingSystemSecretKey";
 	
-	@Value("${application.jwt.tokenExpirationMs}")
-	private int JWT_EXPIRATION_MS;
+	private final int JWT_EXPIRATION_MS = 86400000;
 
 	@Override
 	public String extractUsername(String jwt) {

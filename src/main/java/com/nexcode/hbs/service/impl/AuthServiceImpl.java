@@ -2,9 +2,7 @@ package com.nexcode.hbs.service.impl;
 
 import java.util.Date;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -27,8 +25,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class AuthServiceImpl implements AuthService {
 
-	@Value("${application.jwt.tokenExpirationMs}")
-	private int JWT_EXPIRATION_MS;
+	private final int JWT_EXPIRATION_MS = 86400000;
 
 	private final AuthenticationManager authenticationManager;
 
@@ -43,20 +40,15 @@ public class AuthServiceImpl implements AuthService {
 
 		Date expiredAt = new Date((new Date()).getTime() + JWT_EXPIRATION_MS);
 
-		try {
-			Authentication authentication = authenticationManager.authenticate(
-					new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
+		Authentication authentication = authenticationManager
+				.authenticate(new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
 
-			if (authentication.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN"))
-					|| authentication.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_USER"))) {
-				String jwt = jwtService.generateToken(authentication);
-				return new AuthenticationResponse(jwt, expiredAt.toInstant().toString());
+		if (authentication.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN"))
+				|| authentication.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_USER"))) {
+			String jwt = jwtService.generateToken(authentication);
+			return new AuthenticationResponse(jwt, expiredAt.toInstant().toString());
 
-			} else {
-				throw new InvalidCredentialsException("Username or Password is incorrect!");
-			}
-		} catch (BadCredentialsException e) {
-			System.out.println("Catch InvalidCredentialsException");
+		} else {
 			throw new InvalidCredentialsException("Username or Password is incorrect!");
 		}
 	}
