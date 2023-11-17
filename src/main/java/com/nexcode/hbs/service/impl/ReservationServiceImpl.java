@@ -1,8 +1,6 @@
 package com.nexcode.hbs.service.impl;
 
-import java.sql.Date;
 import java.time.Instant;
-import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.YearMonth;
 import java.time.ZoneOffset;
@@ -108,7 +106,7 @@ public class ReservationServiceImpl implements ReservationService {
 	    }
         
 	    try {
-            sendMail(guestInfo, reservation, "Reservation Details", "reservationConfirmation");
+            sendMail(guestInfo, reservation, "Reservation Details", "reservation-confirmation");
         } catch (OptimisticLockingFailureException e) {
             throw new Exception("The reservation was updated by another transaction. Please try again.", e);
         } catch (Exception e) {
@@ -143,12 +141,11 @@ public class ReservationServiceImpl implements ReservationService {
 	public List<ReservationDto> getCurrentMonthCompletedReservations() {
 		
 		YearMonth yearMonth = YearMonth.now();
-		Integer month = yearMonth.getMonthValue();
-		Integer year = yearMonth.getYear();
+		Instant startOfMonth = yearMonth.atDay(1).atStartOfDay().toInstant(ZoneOffset.UTC);
+		Instant endOfMonth = yearMonth.atEndOfMonth().atTime(LocalTime.MAX).toInstant(ZoneOffset.UTC);
 		
-		List<Reservation> reservations = reservationRepository.findByStatusAndMonth(ReservationStatus.COMPLETED, month, year)
-				.orElseThrow(() -> new NoContentException("There is no completed reservation for this month."));
-
+		List<Reservation> reservations = reservationRepository.findByStatusAndCreatedAtBetween(ReservationStatus.COMPLETED, startOfMonth, endOfMonth);
+		
 		return reservationMapper.mapToDto(reservations);
 	}
 	
@@ -177,10 +174,11 @@ public class ReservationServiceImpl implements ReservationService {
 	public List<ReservationDto> getReservationsWithFilters(String status, YearMonth createdAtMonth, Instant reservationDate, Instant checkInDate,
 			Instant checkOutDate) {
 		
-		Date createdAt = null;
+		Integer month = null;
+		Integer year = null;
 		if (createdAtMonth != null) {
-			LocalDate localDate = createdAtMonth.atDay(1);
-			createdAt = Date.valueOf(localDate);
+			month = createdAtMonth.getMonthValue();
+			year = createdAtMonth.getYear();
 		}
 		
 		ReservationStatus reservationStatus = null;
@@ -192,7 +190,7 @@ public class ReservationServiceImpl implements ReservationService {
 	        }
 	    }
 	    
-		List<Reservation> reservations = reservationRepository.findWithFilters(reservationStatus, createdAt, reservationDate, checkInDate, checkOutDate);
+		List<Reservation> reservations = reservationRepository.findWithFilters(month, year, reservationStatus, reservationDate, checkInDate, checkOutDate);
 		
 		return reservationMapper.mapToDto(reservations);
 	}
@@ -240,7 +238,7 @@ public class ReservationServiceImpl implements ReservationService {
 		
 		reservationRepository.save(reservation);
 		reservedRoomRepository.saveAll(reservedRooms);
-		sendMail(reservation.getGuestInfo(), reservation, "Payment Confirmation", "paymentConfirmation");
+		sendMail(reservation.getGuestInfo(), reservation, "Payment Confirmation", "payment-confirmation");
 	}
 
 	@Override
@@ -261,9 +259,9 @@ public class ReservationServiceImpl implements ReservationService {
 		reservedRoomRepository.saveAll(reservedRooms);
 		
 		if (reservation.getIsPaid()) {
-			sendMail(reservation.getGuestInfo(), reservation, "Reservation Cancellation", "paidReservationCancellation");
+			sendMail(reservation.getGuestInfo(), reservation, "Reservation Cancellation", "paid-reservation-cancellation");
 		} else {
-			sendMail(reservation.getGuestInfo(), reservation, "Reservation Cancellation", "unpaidReservationCancellation");
+			sendMail(reservation.getGuestInfo(), reservation, "Reservation Cancellation", "unpaid-reservation-cancellation");
 		}
 	}
 

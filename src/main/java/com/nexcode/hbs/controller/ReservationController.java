@@ -57,13 +57,13 @@ public class ReservationController {
 	@GetMapping
 	public ResponseEntity<List<ReservationResponse>> getReservations(
 			@RequestParam(required = false) String status,
-			@RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM") YearMonth createdAtMonth,
+			@RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM") YearMonth monthFilter,
 			@RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Instant reservationDate, 
 			@RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Instant checkInDate, 
 			@RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Instant checkOutDate){
 		
-		List<ReservationDto> reservationDtos = (status != null || createdAtMonth != null || reservationDate != null || checkInDate != null || checkOutDate != null) 
-		        ? reservationService.getReservationsWithFilters(status, createdAtMonth, reservationDate, checkInDate, checkOutDate)
+		List<ReservationDto> reservationDtos = (status != null || monthFilter != null || reservationDate != null || checkInDate != null || checkOutDate != null) 
+		        ? reservationService.getReservationsWithFilters(status, monthFilter, reservationDate, checkInDate, checkOutDate)
 		        : reservationService.getPendingReservations();
 		return ResponseEntity.ok(reservationMapper.mapToResponse(reservationDtos));
 	}
@@ -127,13 +127,13 @@ public class ReservationController {
 	//// Getting Completed Reservations, default will be for current month ////
 	@GetMapping("/completed")
 	public ResponseEntity<List<ReservationResponse>> getCompletedReservations(
-			@RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM") YearMonth createdAtMonth, 
+			@RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM") YearMonth monthFilter, 
 			@RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Instant reservationDate, 
 			@RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Instant checkInDate, 
 			@RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Instant checkOutDate){
 		
-		List<ReservationDto> reservationDtos = (createdAtMonth != null || reservationDate != null || checkInDate != null || checkOutDate != null) 
-		        ? reservationService.getReservationsWithFilters("COMPLETED", createdAtMonth, reservationDate, checkInDate, checkOutDate)
+		List<ReservationDto> reservationDtos = (monthFilter != null || reservationDate != null || checkInDate != null || checkOutDate != null) 
+		        ? reservationService.getReservationsWithFilters("COMPLETED", monthFilter, reservationDate, checkInDate, checkOutDate)
 		        : reservationService.getCurrentMonthCompletedReservations();
 		return ResponseEntity.ok(reservationMapper.mapToResponse(reservationDtos));
 	}

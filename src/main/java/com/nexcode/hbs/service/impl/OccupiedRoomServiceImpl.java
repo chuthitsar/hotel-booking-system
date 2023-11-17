@@ -1,8 +1,6 @@
 package com.nexcode.hbs.service.impl;
 
-import java.sql.Date;
 import java.time.Instant;
-import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.YearMonth;
 import java.time.ZoneOffset;
@@ -38,12 +36,13 @@ public class OccupiedRoomServiceImpl implements OccupiedRoomService {
 	@Override
 	public List<OccupiedRoomDto> getOccupiedRoomsWithFilters(YearMonth checkedInMonth, OccupiedRoomStatus status, String type, Instant checkInDate, Instant checkOutDate) {
 		
-		Date checkInAt = null;
+		Integer month = null;
+		Integer year = null;
 		if (checkedInMonth != null) {
-			LocalDate localDate = checkedInMonth.atDay(1);
-			checkInAt = Date.valueOf(localDate);
+			month = checkedInMonth.getMonthValue();
+			year = checkedInMonth.getYear();
 		}
-		List<OccupiedRoom> occupiedRooms = occupiedRoomRepository.findWithFilters(checkInAt, status, type, checkInDate, checkOutDate);
+		List<OccupiedRoom> occupiedRooms = occupiedRoomRepository.findWithFilters(month, year, status, type, checkInDate, checkOutDate);
 		
 		return occupiedRoomMapper.mapToDto(occupiedRooms);
 	}

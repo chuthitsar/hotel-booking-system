@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import com.nexcode.hbs.model.entity.RoomType;
 
 @Repository
-public interface RoomTypeRepository extends JpaRepository<RoomType, Long>{
+public interface RoomTypeRepository extends JpaRepository<RoomType, Long> {
 
 	boolean existsByName(String name);
 

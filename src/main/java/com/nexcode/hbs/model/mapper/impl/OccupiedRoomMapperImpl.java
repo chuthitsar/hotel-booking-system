@@ -11,6 +11,7 @@ import com.nexcode.hbs.model.entity.OccupiedRoom;
 import com.nexcode.hbs.model.mapper.GuestInfoMapper;
 import com.nexcode.hbs.model.mapper.OccupiedRoomMapper;
 import com.nexcode.hbs.model.mapper.RoomMapper;
+import com.nexcode.hbs.model.response.OccupiedRoomDetailsResponse;
 import com.nexcode.hbs.model.response.OccupiedRoomResponse;
 
 import lombok.RequiredArgsConstructor;
@@ -65,16 +66,10 @@ public class OccupiedRoomMapperImpl implements OccupiedRoomMapper {
 		
 		OccupiedRoomResponse occupiedRoomResponse = new OccupiedRoomResponse();
 		occupiedRoomResponse.setId(occupiedRoomDto.getId());
-		occupiedRoomResponse.setReservationId(occupiedRoomDto.getReservationId());
-		
-		GuestInfoDto guestInfo = occupiedRoomDto.getGuestInfo();
-		occupiedRoomResponse.setGuestName(guestInfo.getName());
-		occupiedRoomResponse.setGuestPhone(guestInfo.getPhone());
-		occupiedRoomResponse.setGuestEmail(guestInfo.getEmail());
 		occupiedRoomResponse.setRoomNumber(occupiedRoomDto.getRoomDto().getNumber());
 		occupiedRoomResponse.setRoomType(occupiedRoomDto.getRoomDto().getRoomTypeName());
-		occupiedRoomResponse.setCheckIn(occupiedRoomDto.getCheckIn());
-		occupiedRoomResponse.setCheckOut(occupiedRoomDto.getCheckOut());
+		occupiedRoomResponse.setCheckIn(occupiedRoomDto.getCheckIn().toString());
+		occupiedRoomResponse.setCheckOut(occupiedRoomDto.getCheckOut().toString());
 		occupiedRoomResponse.setStatus(occupiedRoomDto.getStatus());
 		
 		return occupiedRoomResponse;
@@ -90,6 +85,44 @@ public class OccupiedRoomMapperImpl implements OccupiedRoomMapper {
 		List<OccupiedRoomResponse> occupiedRoomResponses = new ArrayList<>();
 		for (OccupiedRoomDto occupiedRoomDto : occupiedRoomDtos) {
 			occupiedRoomResponses.add(mapToResponse(occupiedRoomDto));
+		}
+		return occupiedRoomResponses;
+	}
+	
+	@Override
+	public OccupiedRoomDetailsResponse mapToDetailsResponse(OccupiedRoomDto occupiedRoomDto) {
+		
+		if (occupiedRoomDto == null) {
+			return null;
+		}
+		
+		OccupiedRoomDetailsResponse occupiedRoomResponse = new OccupiedRoomDetailsResponse();
+		occupiedRoomResponse.setId(occupiedRoomDto.getId());
+		occupiedRoomResponse.setReservationId(occupiedRoomDto.getReservationId());
+		
+		GuestInfoDto guestInfo = occupiedRoomDto.getGuestInfo();
+		occupiedRoomResponse.setGuestName(guestInfo.getName());
+		occupiedRoomResponse.setGuestPhone(guestInfo.getPhone());
+		occupiedRoomResponse.setGuestEmail(guestInfo.getEmail());
+		occupiedRoomResponse.setRoomNumber(occupiedRoomDto.getRoomDto().getNumber());
+		occupiedRoomResponse.setRoomType(occupiedRoomDto.getRoomDto().getRoomTypeName());
+		occupiedRoomResponse.setCheckIn(occupiedRoomDto.getCheckIn().toString());
+		occupiedRoomResponse.setCheckOut(occupiedRoomDto.getCheckOut().toString());
+		occupiedRoomResponse.setStatus(occupiedRoomDto.getStatus());
+		
+		return occupiedRoomResponse;
+	}
+
+	@Override
+	public List<OccupiedRoomDetailsResponse> mapToDetailsResponse(List<OccupiedRoomDto> occupiedRoomDtos) {
+		
+		if (occupiedRoomDtos == null) {
+			return null;
+		}
+		
+		List<OccupiedRoomDetailsResponse> occupiedRoomResponses = new ArrayList<>();
+		for (OccupiedRoomDto occupiedRoomDto : occupiedRoomDtos) {
+			occupiedRoomResponses.add(mapToDetailsResponse(occupiedRoomDto));
 		}
 		return occupiedRoomResponses;
 	}

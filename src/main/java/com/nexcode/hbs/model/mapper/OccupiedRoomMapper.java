@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.nexcode.hbs.model.dto.OccupiedRoomDto;
 import com.nexcode.hbs.model.entity.OccupiedRoom;
+import com.nexcode.hbs.model.response.OccupiedRoomDetailsResponse;
 import com.nexcode.hbs.model.response.OccupiedRoomResponse;
 
 public interface OccupiedRoomMapper {
@@ -15,5 +16,9 @@ public interface OccupiedRoomMapper {
 	OccupiedRoomResponse mapToResponse(OccupiedRoomDto occupiedRoomDto);
 	
 	List<OccupiedRoomResponse> mapToResponse(List<OccupiedRoomDto> occupiedRoomDtos);
+	
+	OccupiedRoomDetailsResponse mapToDetailsResponse(OccupiedRoomDto occupiedRoomDto);
+	
+	List<OccupiedRoomDetailsResponse> mapToDetailsResponse(List<OccupiedRoomDto> occupiedRoomDtos);
 
 }

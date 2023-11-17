@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.nexcode.hbs.model.dto.OccupiedRoomDto;
 import com.nexcode.hbs.model.entity.status.OccupiedRoomStatus;
 import com.nexcode.hbs.model.mapper.OccupiedRoomMapper;
-import com.nexcode.hbs.model.response.OccupiedRoomResponse;
+import com.nexcode.hbs.model.response.OccupiedRoomDetailsResponse;
 import com.nexcode.hbs.service.OccupiedRoomService;
 
 import lombok.RequiredArgsConstructor;
@@ -30,7 +30,7 @@ public class OccupiedRoomController {
 	
 	//// Getting All Checked-In Rooms ////
 	@GetMapping
-	public ResponseEntity<List<OccupiedRoomResponse>> getOccupiedRooms(
+	public ResponseEntity<List<OccupiedRoomDetailsResponse>> getOccupiedRooms(
 			@RequestParam(required = false) String type,
 			@RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Instant checkInDate, 
 			@RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Instant checkOutDate) {
@@ -38,11 +38,11 @@ public class OccupiedRoomController {
 		List<OccupiedRoomDto> occupiedRoomDtos = (type != null || checkInDate != null || checkOutDate != null)
 				? occupiedRoomService.getOccupiedRoomsWithFilters(null, OccupiedRoomStatus.CHECKED_IN, type, checkInDate, checkOutDate)
 				: occupiedRoomService.getCurrentOccupiedRooms();
-		return ResponseEntity.ok(occupiedRoomMapper.mapToResponse(occupiedRoomDtos));
+		return ResponseEntity.ok(occupiedRoomMapper.mapToDetailsResponse(occupiedRoomDtos));
 	}
 	
 	@GetMapping("/history")
-	public ResponseEntity<List<OccupiedRoomResponse>> getOccupiedRoomsHistory(
+	public ResponseEntity<List<OccupiedRoomDetailsResponse>> getOccupiedRoomsHistory(
 			@RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM") YearMonth checkedInMonth, 
 			@RequestParam(required = false) String type,
 			@RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Instant checkInDate, 
@@ -51,6 +51,6 @@ public class OccupiedRoomController {
 		List<OccupiedRoomDto> occupiedRoomDtos = (checkedInMonth != null || type != null || checkInDate != null || checkOutDate != null)
 				? occupiedRoomService.getOccupiedRoomsWithFilters(checkedInMonth, OccupiedRoomStatus.CHECKED_OUT, type, checkInDate, checkOutDate)
 				: occupiedRoomService.getCurrentMonthHistory();
-		return ResponseEntity.ok(occupiedRoomMapper.mapToResponse(occupiedRoomDtos));
+		return ResponseEntity.ok(occupiedRoomMapper.mapToDetailsResponse(occupiedRoomDtos));
 	}
 }

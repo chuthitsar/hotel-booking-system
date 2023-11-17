@@ -7,9 +7,17 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class OccupiedRoomResponse {
+public class OccupiedRoomDetailsResponse {
 
 	private Long id;
+	
+	private Long reservationId;
+	
+	private String guestName;
+	
+	private String guestPhone;
+	
+	private String guestEmail;
 	
 	private Integer roomNumber;
 	
@@ -20,5 +28,4 @@ public class OccupiedRoomResponse {
 	private String checkOut;
 	
 	private OccupiedRoomStatus status;
-	
 }

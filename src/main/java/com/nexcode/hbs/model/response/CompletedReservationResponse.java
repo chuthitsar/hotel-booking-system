@@ -1,6 +1,5 @@
 package com.nexcode.hbs.model.response;
 
-import java.time.Instant;
 import java.util.List;
 
 import com.nexcode.hbs.model.entity.status.ReservationStatus;
@@ -28,11 +27,11 @@ public class CompletedReservationResponse {
 	
 	private Integer totalRoom;
 	
-	private Instant checkIn;
+	private String checkIn;
 	
-	private Instant checkOut;
+	private String checkOut;
 	
-	private Instant createdAt;
+	private String createdAt;
 	
 	private Integer lengthOfStay;
 	

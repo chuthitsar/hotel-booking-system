@@ -69,8 +69,8 @@ public class ReservedRoomMapperImpl implements ReservedRoomMapper {
 		reservedRoomResponse.setId(reservedRoomDto.getId());
 		reservedRoomResponse.setRoomNumber(reservedRoomDto.getRoomDto().getNumber());
 		reservedRoomResponse.setReservationId(reservedRoomDto.getReservationId());
-		reservedRoomResponse.setCheckIn(reservedRoomDto.getCheckIn());
-		reservedRoomResponse.setCheckOut(reservedRoomDto.getCheckOut());
+		reservedRoomResponse.setCheckIn(reservedRoomDto.getCheckIn().toString());
+		reservedRoomResponse.setCheckOut(reservedRoomDto.getCheckOut().toString());
 		reservedRoomResponse.setPricePerNight(reservedRoomDto.getPricePerNight());
 		reservedRoomResponse.setStatus(reservedRoomDto.getStatus().name());
 		

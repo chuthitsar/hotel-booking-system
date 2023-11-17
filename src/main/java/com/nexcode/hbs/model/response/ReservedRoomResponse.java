@@ -1,7 +1,5 @@
 package com.nexcode.hbs.model.response;
 
-import java.time.Instant;
-
 import lombok.Getter;
 import lombok.Setter;
 
@@ -17,9 +15,9 @@ public class ReservedRoomResponse {
 	
 	private Long reservationId;
 	
-	private Instant checkIn;
+	private String checkIn;
 	
-	private Instant checkOut;
+	private String checkOut;
 	
 	private Integer pricePerNight;
 	

@@ -1,7 +1,5 @@
 package com.nexcode.hbs.model.response;
 
-import java.time.Instant;
-
 import com.nexcode.hbs.model.entity.status.ReservationStatus;
 
 import lombok.Getter;
@@ -21,11 +19,11 @@ public class ReservationResponse {
 	
 	private Integer totalRoom;
 	
-	private Instant checkIn;
+	private String checkIn;
 	
-	private Instant checkOut;
+	private String checkOut;
 	
-	private Instant createdAt;
+	private String createdAt;
 	
 	private ReservationStatus status;
 }

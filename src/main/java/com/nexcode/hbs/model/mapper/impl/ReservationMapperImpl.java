@@ -79,6 +79,7 @@ public class ReservationMapperImpl implements ReservationMapper {
 		reservationDto.setExpiredAt(reservationDto.getExpiredAt());
 		reservationDto.setStatus(reservation.getStatus());
 		reservationDto.setReservedRoomDtos(reservedRoomMapper.mapToDto(reservation.getReservedRooms()));
+		reservationDto.setOccupiedRoomDtos(occupiedRoomMapper.mapToDto(reservation.getOccupiedRooms()));
 		
 		return reservationDto;
 	}
@@ -110,9 +111,9 @@ public class ReservationMapperImpl implements ReservationMapper {
 		reservationResponse.setGuestName(reservationDto.getGuestInfo().getName());
 		reservationResponse.setGuestEmail(reservationDto.getGuestInfo().getEmail());
 		reservationResponse.setTotalRoom(reservationDto.getTotalRoom());
-		reservationResponse.setCheckIn(reservationDto.getCheckIn());
-		reservationResponse.setCheckOut(reservationDto.getCheckOut());
-		reservationResponse.setCreatedAt(reservationDto.getCreatedAt());
+		reservationResponse.setCheckIn(reservationDto.getCheckIn().toString());
+		reservationResponse.setCheckOut(reservationDto.getCheckOut().toString());
+		reservationResponse.setCreatedAt(reservationDto.getCreatedAt().toString());
 		reservationResponse.setStatus(reservationDto.getStatus());
 		
 		return reservationResponse;
@@ -148,9 +149,9 @@ public class ReservationMapperImpl implements ReservationMapper {
 		reservationResponse.setGuestAddress(reservationDto.getGuestInfo().getAddress());
 		reservationResponse.setNumberOfGuest(reservationDto.getNumberOfGuest());
 		reservationResponse.setTotalRoom(reservationDto.getTotalRoom());
-		reservationResponse.setCheckIn(reservationDto.getCheckIn());
-		reservationResponse.setCheckOut(reservationDto.getCheckOut());
-		reservationResponse.setCreatedAt(reservationDto.getCreatedAt());
+		reservationResponse.setCheckIn(reservationDto.getCheckIn().toString());
+		reservationResponse.setCheckOut(reservationDto.getCheckOut().toString());
+		reservationResponse.setCreatedAt(reservationDto.getCreatedAt().toString());
 		reservationResponse.setLengthOfStay(reservationDto.getLengthOfStay());
 		reservationResponse.setTotalCost(reservationDto.getTotalCost());
 		reservationResponse.setStatus(reservationDto.getStatus());
@@ -176,9 +177,9 @@ public class ReservationMapperImpl implements ReservationMapper {
 		reservationResponse.setGuestAddress(reservationDto.getGuestInfo().getAddress());
 		reservationResponse.setNumberOfGuest(reservationDto.getNumberOfGuest());
 		reservationResponse.setTotalRoom(reservationDto.getTotalRoom());
-		reservationResponse.setCheckIn(reservationDto.getCheckIn());
-		reservationResponse.setCheckOut(reservationDto.getCheckOut());
-		reservationResponse.setCreatedAt(reservationDto.getCreatedAt());
+		reservationResponse.setCheckIn(reservationDto.getCheckIn().toString());
+		reservationResponse.setCheckOut(reservationDto.getCheckOut().toString());
+		reservationResponse.setCreatedAt(reservationDto.getCreatedAt().toString());
 		reservationResponse.setLengthOfStay(reservationDto.getLengthOfStay());
 		reservationResponse.setTotalCost(reservationDto.getTotalCost());
 		reservationResponse.setStatus(reservationDto.getStatus());
