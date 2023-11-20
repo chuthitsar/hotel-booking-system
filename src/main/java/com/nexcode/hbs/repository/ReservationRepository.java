@@ -1,6 +1,7 @@
 package com.nexcode.hbs.repository;
 
 import java.time.Instant;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -41,15 +42,15 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
 			+ "WHERE (:status is null or r.status = :status) "
 			+ "and ((:month is null and :year is null) or (MONTH(r.createdAt) = :month and YEAR(r.createdAt) = :year)) "
 			+ "and (:reservationDate is null or DATE(r.createdAt) = DATE(:reservationDate)) "
-			+ "and (:checkInDate is null or DATE(r.checkIn) = DATE(:checkInDate)) "
-			+ "and (:checkOutDate is null or DATE(r.checkOut) = DATE(:checkOutDate))")
+			+ "and (:checkIn is null or DATE(r.checkIn) = DATE(:checkIn)) "
+			+ "and (:checkOut is null or DATE(r.checkOut) = DATE(:checkOut))")
 	List<Reservation> findWithFilters( 
 			@Param("month") Integer month,
 			@Param("year") Integer year,
 			@Param("status") ReservationStatus status,
-			@Param("reservationDate") Instant reservationDate,
-			@Param("checkInDate") Instant checkInDate, 
-			@Param("checkOutDate") Instant checkOutDate);
+			@Param("reservationDate") LocalDate reservationDateFormat,
+			@Param("checkIn") LocalDate checkIn, 
+			@Param("checkOut") LocalDate checkOut);
 
 	Optional<Reservation> findByReservationID(String reservationId);
 

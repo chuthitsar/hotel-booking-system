@@ -1,6 +1,7 @@
 package com.nexcode.hbs.repository;
 
 import java.time.Instant;
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -32,13 +33,13 @@ public interface ReservedRoomRepository extends JpaRepository<ReservedRoom, Long
 	@Query ("SELECT rr FROM ReservedRoom rr "
 			+ "WHERE (:type is null or rr.room.type.name = :type) "
 			+ "and (:status is null or rr.status = :status) "
-			+ "and (:checkInDate is null or FUNCTION('DATE', rr.checkIn) = FUNCTION('DATE', :checkInDate)) "
-			+ "and (:checkOutDate is null or FUNCTION('DATE', rr.checkOut) = FUNCTION('DATE', :checkOutDate))")
+			+ "and (:checkIn is null or DATE(rr.checkIn) = DATE(:checkIn)) "
+			+ "and (:checkOut is null or DATE(rr.checkOut) = DATE(:checkOut))")
 	List<ReservedRoom> findWithFilters(
 			@Param("type") String type, 
 			@Param("status") ReservedRoomStatus status,
-			@Param("checkInDate") Instant checkInDate, 
-			@Param("checkOutDate") Instant checkOutDate);
+			@Param("checkIn") LocalDate checkIn, 
+			@Param("checkOut") LocalDate checkOut);
 	
 	@Query ("SELECT rr FROM ReservedRoom rr "
 			+ "WHERE MONTH(rr.reservation.createdAt) = :month "

@@ -1,6 +1,5 @@
 package com.nexcode.hbs.service;
 
-import java.time.Instant;
 import java.util.List;
 
 import com.nexcode.hbs.model.dto.ReservedRoomDto;
@@ -17,7 +16,7 @@ public interface ReservedRoomService {
 
 	List<ReservedRoomDto> getReservedRoomsByReservationId(Long id);
 
-	List<ReservedRoomDto> getReservedRoomsWithFilters(String status, String type, Instant checkInDate, Instant checkOutDate);
+	List<ReservedRoomDto> getReservedRoomsWithFilters(String status, String type, String checkInDate, String checkOutDate);
 
 	List<ReservedRoomDto> getReservedRoomsForMonth(Integer month, Integer year);
 

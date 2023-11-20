@@ -1,6 +1,7 @@
 package com.nexcode.hbs.repository;
 
 import java.time.Instant;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,10 +22,10 @@ public interface OccupiedRoomRepository extends JpaRepository<OccupiedRoom, Long
 			+ "WHERE (:status is null or r.status = :status) "
 			+ "and ((:month is null and :year is null) or (MONTH(r.checkIn) = :month and YEAR(r.checkIn) = :year)) "
 			+ "and (:type is null or r.room.type.name = :type) "
-			+ "and (:checkInDate is null or DATE(r.checkIn) = DATE(:checkInDate)) "
-			+ "and (:checkOutDate is null or DATE(r.checkOut) = DATE(:checkOutDate))")
-	List<OccupiedRoom> findWithFilters(Integer month, Integer year, OccupiedRoomStatus status, String type, Instant checkInDate,
-			Instant checkOutDate);
+			+ "and (:checkIn is null or DATE(r.checkIn) = DATE(:checkIn)) "
+			+ "and (:checkOut is null or DATE(r.checkOut) = DATE(:checkOut))")
+	List<OccupiedRoom> findWithFilters(Integer month, Integer year, OccupiedRoomStatus status, String type, LocalDate checkIn,
+			LocalDate checkOut);
 
 	Optional<List<OccupiedRoom>> findByCheckInBetweenAndIsCompletedIsTrue(Instant startOfMonth, Instant endOfMonth);
 

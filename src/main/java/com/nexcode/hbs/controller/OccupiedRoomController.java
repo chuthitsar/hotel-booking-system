@@ -1,7 +1,5 @@
 package com.nexcode.hbs.controller;
 
-import java.time.Instant;
-import java.time.YearMonth;
 import java.util.List;
 
 import org.springframework.format.annotation.DateTimeFormat;
@@ -32,8 +30,9 @@ public class OccupiedRoomController {
 	@GetMapping
 	public ResponseEntity<List<OccupiedRoomDetailsResponse>> getOccupiedRooms(
 			@RequestParam(required = false) String type,
-			@RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Instant checkInDate, 
-			@RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Instant checkOutDate) {
+			@RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") String checkInDate, 
+			@RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") String checkOutDate) {
+		
 		
 		List<OccupiedRoomDto> occupiedRoomDtos = (type != null || checkInDate != null || checkOutDate != null)
 				? occupiedRoomService.getOccupiedRoomsWithFilters(null, OccupiedRoomStatus.CHECKED_IN, type, checkInDate, checkOutDate)
@@ -43,13 +42,13 @@ public class OccupiedRoomController {
 	
 	@GetMapping("/history")
 	public ResponseEntity<List<OccupiedRoomDetailsResponse>> getOccupiedRoomsHistory(
-			@RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM") YearMonth checkedInMonth, 
+			@RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM") String monthFilter, 
 			@RequestParam(required = false) String type,
-			@RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Instant checkInDate, 
-			@RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Instant checkOutDate) {
+			@RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") String checkInDate, 
+			@RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") String checkOutDate) {
 		
-		List<OccupiedRoomDto> occupiedRoomDtos = (checkedInMonth != null || type != null || checkInDate != null || checkOutDate != null)
-				? occupiedRoomService.getOccupiedRoomsWithFilters(checkedInMonth, OccupiedRoomStatus.CHECKED_OUT, type, checkInDate, checkOutDate)
+		List<OccupiedRoomDto> occupiedRoomDtos = (monthFilter != null || type != null || checkInDate != null || checkOutDate != null)
+				? occupiedRoomService.getOccupiedRoomsWithFilters(monthFilter, OccupiedRoomStatus.CHECKED_OUT, type, checkInDate, checkOutDate)
 				: occupiedRoomService.getCurrentMonthHistory();
 		return ResponseEntity.ok(occupiedRoomMapper.mapToDetailsResponse(occupiedRoomDtos));
 	}

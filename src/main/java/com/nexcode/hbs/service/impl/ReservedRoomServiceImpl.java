@@ -1,6 +1,8 @@
 package com.nexcode.hbs.service.impl;
 
 import java.time.Instant;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import javax.transaction.Transactional;
@@ -128,7 +130,7 @@ public class ReservedRoomServiceImpl implements ReservedRoomService {
 //	}
 	
 	@Override
-	public List<ReservedRoomDto> getReservedRoomsWithFilters(String status, String type, Instant checkInDate, Instant checkOutDate) {
+	public List<ReservedRoomDto> getReservedRoomsWithFilters(String status, String type, String checkInDate, String checkOutDate) {
 		
 		ReservedRoomStatus roomStatus = null;
 	    if (status != null) {
@@ -138,7 +140,17 @@ public class ReservedRoomServiceImpl implements ReservedRoomService {
 	            throw new InvalidStatusException("Invalid room status: " + status);
 	        }
 	    }
-		List<ReservedRoom> reservedRooms = reservedRoomRepository.findWithFilters(type, roomStatus, checkInDate, checkOutDate);
+	    
+	    LocalDate checkIn = null;
+		LocalDate checkOut = null;
+		if (checkInDate != null) {
+			checkIn = LocalDate.parse(checkInDate, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+		}
+		if (checkOutDate != null) {
+			checkOut = LocalDate.parse(checkOutDate, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+		}
+		
+		List<ReservedRoom> reservedRooms = reservedRoomRepository.findWithFilters(type, roomStatus, checkIn, checkOut);
 		
 		return reservedRoomMapper.mapToDto(reservedRooms);
 	}

@@ -1,9 +1,11 @@
 package com.nexcode.hbs.service.impl;
 
 import java.time.Instant;
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.YearMonth;
 import java.time.ZoneOffset;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -34,15 +36,25 @@ public class OccupiedRoomServiceImpl implements OccupiedRoomService {
 	private final OccupiedRoomMapper occupiedRoomMapper;
 
 	@Override
-	public List<OccupiedRoomDto> getOccupiedRoomsWithFilters(YearMonth checkedInMonth, OccupiedRoomStatus status, String type, Instant checkInDate, Instant checkOutDate) {
+	public List<OccupiedRoomDto> getOccupiedRoomsWithFilters(String monthFilter, OccupiedRoomStatus status, String type, String checkInDate, String checkOutDate) {
 		
 		Integer month = null;
 		Integer year = null;
-		if (checkedInMonth != null) {
-			month = checkedInMonth.getMonthValue();
-			year = checkedInMonth.getYear();
+		if (monthFilter != null) {
+			YearMonth monthFilterFormat = YearMonth.parse(monthFilter, DateTimeFormatter.ofPattern("yyyy-MM"));
+			month = monthFilterFormat.getMonthValue();
+			year = monthFilterFormat.getYear();
 		}
-		List<OccupiedRoom> occupiedRooms = occupiedRoomRepository.findWithFilters(month, year, status, type, checkInDate, checkOutDate);
+		
+		LocalDate checkIn = null;
+		LocalDate checkOut = null;
+		if (checkInDate != null) {
+			checkIn = LocalDate.parse(checkInDate, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+		}
+		if (checkOutDate != null) {
+			checkOut = LocalDate.parse(checkOutDate, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+		}
+		List<OccupiedRoom> occupiedRooms = occupiedRoomRepository.findWithFilters(month, year, status, type, checkIn, checkOut);
 		
 		return occupiedRoomMapper.mapToDto(occupiedRooms);
 	}

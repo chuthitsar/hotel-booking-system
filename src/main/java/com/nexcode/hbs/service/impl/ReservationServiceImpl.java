@@ -1,9 +1,11 @@
 package com.nexcode.hbs.service.impl;
 
 import java.time.Instant;
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.YearMonth;
 import java.time.ZoneOffset;
+import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 
@@ -171,14 +173,28 @@ public class ReservationServiceImpl implements ReservationService {
 //	}
 	
 	@Override
-	public List<ReservationDto> getReservationsWithFilters(String status, YearMonth createdAtMonth, Instant reservationDate, Instant checkInDate,
-			Instant checkOutDate) {
+	public List<ReservationDto> getReservationsWithFilters(String status, String monthFilter, String reservationDate, String checkInDate,
+			String checkOutDate) {
 		
 		Integer month = null;
 		Integer year = null;
-		if (createdAtMonth != null) {
-			month = createdAtMonth.getMonthValue();
-			year = createdAtMonth.getYear();
+		if (monthFilter != null) {
+			YearMonth monthFilterFormat = YearMonth.parse(monthFilter, DateTimeFormatter.ofPattern("yyyy-MM"));
+			month = monthFilterFormat.getMonthValue();
+			year = monthFilterFormat.getYear();
+		}
+		
+		LocalDate reservationDateFormat = null;
+		LocalDate checkIn = null;
+		LocalDate checkOut = null;
+		if (reservationDate != null) {
+			reservationDateFormat = LocalDate.parse(reservationDate, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+		}
+		if (checkInDate != null) {
+			checkIn = LocalDate.parse(checkInDate, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+		}
+		if (checkOutDate != null) {
+			checkOut = LocalDate.parse(checkOutDate, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 		}
 		
 		ReservationStatus reservationStatus = null;
@@ -190,7 +206,7 @@ public class ReservationServiceImpl implements ReservationService {
 	        }
 	    }
 	    
-		List<Reservation> reservations = reservationRepository.findWithFilters(month, year, reservationStatus, reservationDate, checkInDate, checkOutDate);
+		List<Reservation> reservations = reservationRepository.findWithFilters(month, year, reservationStatus, reservationDateFormat, checkIn, checkOut);
 		
 		return reservationMapper.mapToDto(reservations);
 	}

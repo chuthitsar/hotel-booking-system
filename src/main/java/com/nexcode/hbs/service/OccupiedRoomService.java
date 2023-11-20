@@ -1,7 +1,5 @@
 package com.nexcode.hbs.service;
 
-import java.time.Instant;
-import java.time.YearMonth;
 import java.util.List;
 
 import com.nexcode.hbs.model.dto.OccupiedRoomDto;
@@ -10,7 +8,7 @@ import com.nexcode.hbs.model.entity.status.OccupiedRoomStatus;
 
 public interface OccupiedRoomService {
 
-	List<OccupiedRoomDto> getOccupiedRoomsWithFilters(YearMonth checkInMonth, OccupiedRoomStatus status, String type, Instant checkInDate, Instant checkOutDate);
+	List<OccupiedRoomDto> getOccupiedRoomsWithFilters(String monthFilter, OccupiedRoomStatus status, String type, String checkInDate, String checkOutDate);
 
 	List<OccupiedRoomDto> getCurrentOccupiedRooms();
 

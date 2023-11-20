@@ -1,6 +1,5 @@
 package com.nexcode.hbs.controller;
 
-import java.time.Instant;
 import java.util.List;
 
 import org.springframework.format.annotation.DateTimeFormat;
@@ -73,8 +72,8 @@ public class ReservedRoomController {
 	public ResponseEntity<List<ReservedRoomResponse>> getAllReservedRooms(
 			@RequestParam(required = false) String status,
 			@RequestParam(required = false) String type,
-			@RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Instant checkInDate,
-			@RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Instant checkOutDate) {
+			@RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") String checkInDate,
+			@RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") String checkOutDate) {
 
 		List<ReservedRoomDto> reservedRoomDtos = (type != null || status != null || checkInDate != null
 				|| checkOutDate != null)

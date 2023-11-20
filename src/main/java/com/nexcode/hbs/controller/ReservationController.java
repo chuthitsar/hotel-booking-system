@@ -1,7 +1,5 @@
 package com.nexcode.hbs.controller;
 
-import java.time.Instant;
-import java.time.YearMonth;
 import java.util.List;
 
 import org.springframework.format.annotation.DateTimeFormat;
@@ -57,10 +55,10 @@ public class ReservationController {
 	@GetMapping
 	public ResponseEntity<List<ReservationResponse>> getReservations(
 			@RequestParam(required = false) String status,
-			@RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM") YearMonth monthFilter,
-			@RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Instant reservationDate, 
-			@RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Instant checkInDate, 
-			@RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Instant checkOutDate){
+			@RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM") String monthFilter,
+			@RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") String reservationDate, 
+			@RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") String checkInDate, 
+			@RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") String checkOutDate){
 		
 		List<ReservationDto> reservationDtos = (status != null || monthFilter != null || reservationDate != null || checkInDate != null || checkOutDate != null) 
 		        ? reservationService.getReservationsWithFilters(status, monthFilter, reservationDate, checkInDate, checkOutDate)
@@ -120,10 +118,10 @@ public class ReservationController {
 	//// Getting Completed Reservations, default will be for current month ////
 	@GetMapping("/completed")
 	public ResponseEntity<List<ReservationResponse>> getCompletedReservations(
-			@RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM") YearMonth monthFilter, 
-			@RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Instant reservationDate, 
-			@RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Instant checkInDate, 
-			@RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Instant checkOutDate){
+			@RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM") String monthFilter, 
+			@RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") String reservationDate, 
+			@RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") String checkInDate, 
+			@RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") String checkOutDate){
 		
 		List<ReservationDto> reservationDtos = (monthFilter != null || reservationDate != null || checkInDate != null || checkOutDate != null) 
 		        ? reservationService.getReservationsWithFilters("COMPLETED", monthFilter, reservationDate, checkInDate, checkOutDate)

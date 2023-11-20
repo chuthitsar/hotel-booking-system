@@ -1,7 +1,5 @@
 package com.nexcode.hbs.service;
 
-import java.time.Instant;
-import java.time.YearMonth;
 import java.util.List;
 
 import com.nexcode.hbs.model.dto.ReservationDto;
@@ -27,8 +25,8 @@ public interface ReservationService {
 
 	void checkAndUpdateExpired();
 
-	List<ReservationDto> getReservationsWithFilters(String status, YearMonth createdAtMonth, Instant reservationDate, Instant checkInDate,
-			Instant checkOutDate);
+	List<ReservationDto> getReservationsWithFilters(String status, String monthFilter, String reservationDate, String checkInDate,
+			String checkOutDate);
 	
 	List<DailyIncomeForMonthResponse> getDailyIncomeForMonth(Integer month, Integer year);
 
