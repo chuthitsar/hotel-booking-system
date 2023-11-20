@@ -67,7 +67,8 @@ public class RoomTypeController {
 	public ResponseEntity<List<RoomTypeAvailabilityResponse>> getRoomTypeAvailability(@RequestBody RoomTypeAvailabilityRequest request) {
 		Instant checkIn = Instant.from(DateTimeFormatter.ISO_DATE_TIME.parse(request.getCheckInTime())).atZone(ZoneId.of("UTC")).toInstant();
 	    Instant checkOut = Instant.from(DateTimeFormatter.ISO_DATE_TIME.parse(request.getCheckOutTime())).atZone(ZoneId.of("UTC")).toInstant();
-		return new ResponseEntity<>(
+		
+	    return new ResponseEntity<>(
 				roomTypeAvailabilityMapper.mapToResponse(roomTypeService.getAvailableRoomTypes(checkIn, checkOut)), 
 				HttpStatus.OK);
 	}

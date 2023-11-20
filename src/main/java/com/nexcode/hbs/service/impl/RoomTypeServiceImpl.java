@@ -121,6 +121,9 @@ public class RoomTypeServiceImpl implements RoomTypeService {
 	@Override
 	public List<RoomTypeAvailabilityDto> getAvailableRoomTypes(Instant checkInDate, Instant checkOutDate) {
 
+		if (!checkInDate.isBefore(checkOutDate)) {
+			throw new BadRequestException("Date Invalid!");
+		}
 		return roomRepository.getAvailableRoomTypes(checkInDate, checkOutDate);
 	}
 

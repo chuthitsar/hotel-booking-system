@@ -18,7 +18,6 @@ import javax.persistence.OneToOne;
 import javax.persistence.PostPersist;
 import javax.persistence.Table;
 import javax.persistence.Version;
-import javax.validation.constraints.Future;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;

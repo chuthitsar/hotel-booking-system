@@ -60,6 +60,10 @@ public class ReservationServiceImpl implements ReservationService {
 	@Transactional
 	public void createReservation(ReservationDto reservationDto) throws Exception {
 		
+		if (!reservationDto.getCheckIn().isBefore(reservationDto.getCheckOut())) {
+			throw new BadRequestException("Date Invalid!");
+		}
+		
 		GuestInfoDto guestInfoDto = reservationDto.getGuestInfo();
 		GuestInfo guestInfo = new GuestInfo();
 	    guestInfo.setName(guestInfoDto.getName());
