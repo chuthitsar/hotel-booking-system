@@ -16,4 +16,6 @@ public interface OccupiedRoomService {
 
 	void setOccupiedRoom(Long id, Room room);
 
+	void checkOutRoom(Long id);
+
 }

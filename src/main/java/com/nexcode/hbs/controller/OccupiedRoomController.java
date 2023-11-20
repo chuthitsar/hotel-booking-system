@@ -3,8 +3,11 @@ package com.nexcode.hbs.controller;
 import java.util.List;
 
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -12,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.nexcode.hbs.model.dto.OccupiedRoomDto;
 import com.nexcode.hbs.model.entity.status.OccupiedRoomStatus;
 import com.nexcode.hbs.model.mapper.OccupiedRoomMapper;
+import com.nexcode.hbs.model.response.ApiResponse;
 import com.nexcode.hbs.model.response.OccupiedRoomDetailsResponse;
 import com.nexcode.hbs.service.OccupiedRoomService;
 
@@ -51,5 +55,14 @@ public class OccupiedRoomController {
 				? occupiedRoomService.getOccupiedRoomsWithFilters(monthFilter, OccupiedRoomStatus.CHECKED_OUT, type, checkInDate, checkOutDate)
 				: occupiedRoomService.getCurrentMonthHistory();
 		return ResponseEntity.ok(occupiedRoomMapper.mapToDetailsResponse(occupiedRoomDtos));
+	}
+	
+	@PutMapping("/{id}/check-out")
+	public ResponseEntity<ApiResponse> CheckOutRoom(@PathVariable Long id) {
+		occupiedRoomService.checkOutRoom(id);
+		return new ResponseEntity<>(
+				new ApiResponse(true,
+						"Checked out the Room Successfully."),
+				HttpStatus.OK);
 	}
 }

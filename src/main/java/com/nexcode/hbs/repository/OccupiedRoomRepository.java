@@ -17,6 +17,8 @@ public interface OccupiedRoomRepository extends JpaRepository<OccupiedRoom, Long
 	Optional<List<OccupiedRoom>> findByStatus(OccupiedRoomStatus status);
 
 	Optional<OccupiedRoom> findByRoomAndStatus(Room room, OccupiedRoomStatus status);
+	
+	Optional<OccupiedRoom> findByIdAndStatus(Long id, OccupiedRoomStatus checkedIn);
 
 	@Query ("SELECT r FROM OccupiedRoom r "
 			+ "WHERE (:status is null or r.status = :status) "

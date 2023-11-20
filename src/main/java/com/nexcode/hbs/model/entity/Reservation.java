@@ -57,7 +57,6 @@ public class Reservation {
 	@Column(name = "check_in", columnDefinition = "TIMESTAMP")
 	private Instant checkIn;
 	
-	@Future
 	@Column(name = "check_out", columnDefinition = "TIMESTAMP")
 	private Instant checkOut;
 	

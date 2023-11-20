@@ -8,30 +8,39 @@ import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
+import javax.transaction.Transactional;
+
 import org.springframework.stereotype.Service;
 
 import com.nexcode.hbs.model.dto.OccupiedRoomDto;
 import com.nexcode.hbs.model.entity.OccupiedRoom;
 import com.nexcode.hbs.model.entity.Reservation;
+import com.nexcode.hbs.model.entity.ReservedRoom;
 import com.nexcode.hbs.model.entity.Room;
 import com.nexcode.hbs.model.entity.status.OccupiedRoomStatus;
 import com.nexcode.hbs.model.entity.status.ReservationStatus;
+import com.nexcode.hbs.model.entity.status.ReservedRoomStatus;
+import com.nexcode.hbs.model.entity.status.RoomStatus;
 import com.nexcode.hbs.model.exception.NoContentException;
 import com.nexcode.hbs.model.exception.RecordNotFoundException;
 import com.nexcode.hbs.model.mapper.OccupiedRoomMapper;
 import com.nexcode.hbs.repository.OccupiedRoomRepository;
 import com.nexcode.hbs.repository.ReservationRepository;
+import com.nexcode.hbs.repository.ReservedRoomRepository;
 import com.nexcode.hbs.service.OccupiedRoomService;
 
 import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class OccupiedRoomServiceImpl implements OccupiedRoomService {
 	
 	private final OccupiedRoomRepository occupiedRoomRepository;
 	
 	private final ReservationRepository reservationRepository;
+	
+	private final ReservedRoomRepository reservedRoomRepository;
 	
 	private final OccupiedRoomMapper occupiedRoomMapper;
 
@@ -100,6 +109,27 @@ public class OccupiedRoomServiceImpl implements OccupiedRoomService {
 		reservation.setStatus(ReservationStatus.COMPLETED);
 		
 		occupiedRoomRepository.save(occupiedRoom);
+	}
+
+	@Override
+	public void checkOutRoom(Long id) {
+		
+		OccupiedRoom occupiedRoom = occupiedRoomRepository.findByIdAndStatus(id, OccupiedRoomStatus.CHECKED_IN)
+				.orElseThrow(() -> new RecordNotFoundException("Occupied Room not found with CHECKED_IN status and with Id: " + id));
+		
+		occupiedRoom.setStatus(OccupiedRoomStatus.CHECKED_OUT);
+		occupiedRoom.setCheckOut(Instant.now());
+		occupiedRoom.setIsCompleted(true);
+		occupiedRoom.getRoom().setStatus(RoomStatus.AVAILABLE);
+		occupiedRoomRepository.save(occupiedRoom);
+
+		ReservedRoom reservedRoom = reservedRoomRepository.findByRoomAndStatus(occupiedRoom.getRoom(), ReservedRoomStatus.CHECKED_IN);
+		if (reservedRoom != null) {
+			reservedRoom.setStatus(ReservedRoomStatus.CHECKED_OUT);
+			reservedRoom.setCheckOut(Instant.now());
+			reservedRoomRepository.save(reservedRoom);
+		}
+		
 	}
 
 }
