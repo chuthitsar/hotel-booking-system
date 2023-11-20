@@ -25,5 +25,5 @@ public class RoomTypeResponse {
 		
 	private String imageUrl;
 	
-	private List<Long> amenityIds;
+	private List<AmenityResponse> amenities;
 }

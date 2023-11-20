@@ -57,6 +57,7 @@ public class AmenityMapperImpl implements AmenityMapper {
 		AmenityResponse amenityResponse = new AmenityResponse();
 		amenityResponse.setId(amenity.getId());
 		amenityResponse.setName(amenity.getName());
+		amenityResponse.setIcon(amenity.getIcon());
 
 		return amenityResponse;
 	}

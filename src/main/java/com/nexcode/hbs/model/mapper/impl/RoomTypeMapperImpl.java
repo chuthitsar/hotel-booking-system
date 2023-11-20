@@ -105,7 +105,7 @@ public class RoomTypeMapperImpl implements RoomTypeMapper {
 		roomTypeResponse.setDescription(roomTypeDto.getDescription());
 		roomTypeResponse.setTotalRoom(roomTypeDto.getTotalRoom());
 		roomTypeResponse.setImageUrl(roomTypeDto.getImageUrl());
-		roomTypeResponse.setAmenityIds(roomTypeDto.getAmenityIds());
+		roomTypeResponse.setAmenities(amenityMapper.mapToResponse(roomTypeDto.getAmenities()));
 				
 		return roomTypeResponse;
 	}
