@@ -205,6 +205,10 @@ public class ReservedRoomServiceImpl implements ReservedRoomService {
 				throw new BadRequestException("The reservation is currently not CONFIRMED. Cannot Check In!");
 			}
 		}
+		
+		if (!room.getStatus().equals(RoomStatus.AVAILABLE)) {
+			throw new BadRequestException("The room is currently unavailable!");
+		}
 		room.setStatus(RoomStatus.OCCUPIED);
 		
 		reservedRoom.setStatus(ReservedRoomStatus.CHECKED_IN);
