@@ -41,5 +41,7 @@ public class ReservationDetailsResponse {
 	
 	private List<ReservedRoomResponse> reservedRooms;
 	
+	private List<String> selectedRooms;
+	
 	private String specialRequest;
 }

@@ -156,6 +156,7 @@ public class ReservationMapperImpl implements ReservationMapper {
 		reservationResponse.setTotalCost(reservationDto.getTotalCost());
 		reservationResponse.setStatus(reservationDto.getStatus());
 		reservationResponse.setReservedRooms(reservedRoomMapper.mapToResponse(reservationDto.getReservedRoomDtos()));
+		reservationResponse.setSelectedRooms(reservationDto.getSelectedRooms());
 		reservationResponse.setSpecialRequest(reservationDto.getSpecialRequest());
 		
 		return reservationResponse;

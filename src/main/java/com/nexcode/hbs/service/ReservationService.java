@@ -7,7 +7,7 @@ import com.nexcode.hbs.model.response.DailyIncomeForMonthResponse;
 
 public interface ReservationService {
 
-	void createReservation(ReservationDto reservationDto) throws Exception;
+	ReservationDto createReservation(ReservationDto reservationDto) throws Exception;
 
 	List<ReservationDto> getPendingReservations();
 	

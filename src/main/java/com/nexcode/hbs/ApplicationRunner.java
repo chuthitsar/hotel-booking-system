@@ -20,8 +20,8 @@ import com.nexcode.hbs.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;
 
-@RequiredArgsConstructor
 @Component
+@RequiredArgsConstructor
 public class ApplicationRunner implements CommandLineRunner {
 
 	private final UserRepository userRepository;

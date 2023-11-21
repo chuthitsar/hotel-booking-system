@@ -58,7 +58,7 @@ public class ReservationServiceImpl implements ReservationService {
 	
 	@Override
 	@Transactional
-	public void createReservation(ReservationDto reservationDto) throws Exception {
+	public ReservationDto createReservation(ReservationDto reservationDto) throws Exception {
 		
 		if (!reservationDto.getCheckIn().isBefore(reservationDto.getCheckOut())) {
 			throw new BadRequestException("Date Invalid!");
@@ -118,6 +118,10 @@ public class ReservationServiceImpl implements ReservationService {
         } catch (Exception e) {
             throw new Exception("Failed to save the reservation. Please try again.", e);
         }
+	    
+	    ReservationDto createdReservationDto = reservationMapper.mapToDto(reservation);
+	    createdReservationDto.setSelectedRooms(selectedRooms);
+	    return createdReservationDto;
 		
 	}
 

@@ -46,9 +46,10 @@ public class ReservationController {
 	private final ReservedRoomMapper reservedRoomMapper;
 	
 	@PostMapping
-	public ResponseEntity<ApiResponse> createReservation(@RequestBody ReservationRequest reservationRequest) throws Exception {
-		reservationService.createReservation(reservationMapper.mapToDto(reservationRequest));
-		return new ResponseEntity<>(new ApiResponse(true, "Reservation Successful!"), HttpStatus.CREATED);
+	public ResponseEntity<ReservationDetailsResponse> createReservation(@RequestBody ReservationRequest reservationRequest) throws Exception {
+		ReservationDto reservationDto = reservationService.createReservation(reservationMapper.mapToDto(reservationRequest));
+//		return new ResponseEntity<>(new ApiResponse(true, "Reservation Successful!"), HttpStatus.CREATED);
+		return ResponseEntity.ok(reservationMapper.mapToDetailsResponse(reservationDto));
 	}
 	
 	//// Getting Reservations, default will be all pending reservations ////

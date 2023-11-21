@@ -18,5 +18,10 @@ public class HotelBookingSystemApplication {
 	void started() {
 		TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
 	}
+	
+//	@Bean
+//    public ApplicationRunner applicationStartupRunner() {
+//        return new ApplicationRunner();
+//    }
 
 }
