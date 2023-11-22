@@ -94,8 +94,7 @@ public class ReservationServiceImpl implements ReservationService {
 	    for (String roomType: selectedRooms) {
 	    	
 	    	List<Room> rooms = roomRepository.findAvailableRoomsByTypeAndDate(roomType, reservation.getCheckIn(), reservation.getCheckOut());
-	    	System.out.println(rooms.size());
-	    	System.out.println(roomType);
+
 	    	if (rooms.isEmpty()) {
 	    		throw new BadRequestException("The selected room is not available anymore. Reservation Failed!");
 	    	}

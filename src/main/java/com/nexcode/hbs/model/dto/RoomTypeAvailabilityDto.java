@@ -1,5 +1,7 @@
 package com.nexcode.hbs.model.dto;
 
+import com.nexcode.hbs.model.entity.RoomType;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -9,7 +11,7 @@ import lombok.Setter;
 @AllArgsConstructor
 public class RoomTypeAvailabilityDto {
 
-	private Long type;
+	private RoomType type;
 	
 	private Long available;
 }

@@ -7,11 +7,17 @@ import org.springframework.stereotype.Component;
 
 import com.nexcode.hbs.model.dto.RoomTypeAvailabilityDto;
 import com.nexcode.hbs.model.mapper.RoomTypeAvailabilityMapper;
+import com.nexcode.hbs.model.mapper.RoomTypeMapper;
 import com.nexcode.hbs.model.response.RoomTypeAvailabilityResponse;
 
+import lombok.RequiredArgsConstructor;
+
 @Component
+@RequiredArgsConstructor
 public class RoomTypeAvailabilityMapperImpl implements RoomTypeAvailabilityMapper {
 
+	private final RoomTypeMapper roomTypeMapper;
+	
 	@Override
 	public RoomTypeAvailabilityResponse mapToResponse(RoomTypeAvailabilityDto roomTypeAvailabilityDto) {
 
@@ -20,7 +26,8 @@ public class RoomTypeAvailabilityMapperImpl implements RoomTypeAvailabilityMappe
 		}
 		
 		RoomTypeAvailabilityResponse rtAvailabilityResponse = new RoomTypeAvailabilityResponse();
-		rtAvailabilityResponse.setType(roomTypeAvailabilityDto.getType());
+		
+		rtAvailabilityResponse.setType(roomTypeMapper.mapToResponse(roomTypeMapper.mapToDto(roomTypeAvailabilityDto.getType())));
 		rtAvailabilityResponse.setAvailable(roomTypeAvailabilityDto.getAvailable());
 		
 		return rtAvailabilityResponse;

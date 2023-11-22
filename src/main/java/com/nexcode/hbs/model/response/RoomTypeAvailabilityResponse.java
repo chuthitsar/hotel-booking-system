@@ -7,7 +7,7 @@ import lombok.Setter;
 @Setter
 public class RoomTypeAvailabilityResponse {
 
-	private Long type;
+	private RoomTypeResponse type;
 	
 	private Long available;
 }

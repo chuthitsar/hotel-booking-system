@@ -2,11 +2,9 @@ package com.nexcode.hbs.model.mapper.impl;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Component;
 
-import com.nexcode.hbs.model.dto.AmenityDto;
 import com.nexcode.hbs.model.dto.RoomTypeDto;
 import com.nexcode.hbs.model.entity.RoomType;
 import com.nexcode.hbs.model.mapper.AmenityMapper;
@@ -40,12 +38,6 @@ public class RoomTypeMapperImpl implements RoomTypeMapper {
 		roomTypeDto.setTotalRoom(roomType.getTotalRoom());
 		roomTypeDto.setImageUrl(roomType.getImageUrl());
 		roomTypeDto.setAmenities(amenityMapper.mapToDto(roomType.getAmenities()));
-		
-		List<Long> amenityIds = roomTypeDto.getAmenities().stream()
-		        .map(AmenityDto::getId)
-		        .collect(Collectors.toList());
-
-		roomTypeDto.setAmenityIds(amenityIds);
 				
 		return roomTypeDto;
 	}

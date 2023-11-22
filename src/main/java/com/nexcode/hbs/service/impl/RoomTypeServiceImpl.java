@@ -124,8 +124,10 @@ public class RoomTypeServiceImpl implements RoomTypeService {
 		if (!checkInDate.isBefore(checkOutDate)) {
 			throw new BadRequestException("Date Invalid!");
 		}
-		return roomRepository.getAvailableRoomTypes(checkInDate, checkOutDate);
+
+		return roomTypeRepository.getAvailableRoomTypes(checkInDate, checkOutDate);
 	}
+	
 
 	@Override
 	public RoomTypeDto getRoomTypeByName(String roomTypeName) {
