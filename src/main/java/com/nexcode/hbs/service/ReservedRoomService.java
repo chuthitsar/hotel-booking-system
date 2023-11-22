@@ -6,8 +6,6 @@ import com.nexcode.hbs.model.dto.ReservedRoomDto;
 
 public interface ReservedRoomService {
 
-	void updateStatus(Long id, String status);
-
 	void updateReservedRoomNumber(Long id, Integer roomNumber);
 
 	List<ReservedRoomDto> getAllReservedRooms();

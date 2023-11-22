@@ -38,53 +38,6 @@ public class ReservedRoomServiceImpl implements ReservedRoomService {
 	private final ReservedRoomMapper reservedRoomMapper;
 	
 	private final OccupiedRoomService occupiedRoomService;
-	
-	@Override
-	public void updateStatus(Long id, String status) {
-		
-		ReservedRoom reservedRoom = reservedRoomRepository.findById(id)
-				.orElseThrow(() -> new RecordNotFoundException("Reserverd Room Not Found!"));
-		
-		Room room = reservedRoom.getRoom();
-		switch(status) {
-		
-		case "CHECKED_IN":
-			if (!reservedRoom.getReservation().getStatus().equals(ReservationStatus.CONFIRMED)) {
-				throw new BadRequestException("The reservation is currently not CONFIRMED. Cannot Check In!");
-			}
-			
-			if (!reservedRoom.getReservation().getStatus().equals(ReservationStatus.COMPLETED)) {
-				reservedRoom.getReservation().setStatus(ReservationStatus.COMPLETED);
-			}
-			reservedRoom.setStatus(ReservedRoomStatus.CHECKED_IN);
-			reservedRoom.setCheckIn(Instant.now());
-			room.setStatus(RoomStatus.OCCUPIED);
-			break;
-			
-		case "CHECKED_OUT":
-			if (!reservedRoom.getStatus().equals(ReservedRoomStatus.CHECKED_IN)) {
-				throw new BadRequestException("This room is currently not CHECKED_IN. Cannot Check Out!");
-			}
-			reservedRoom.setStatus(ReservedRoomStatus.CHECKED_OUT);
-			reservedRoom.setCheckOut(Instant.now());
-			room.setStatus(RoomStatus.AVAILABLE);
-			break;
-			
-		case "CANCELED":
-			if (reservedRoom.getStatus().equals(ReservedRoomStatus.PENDING)) {
-				throw new BadRequestException("The reservation is currently PENDING. Cannot Cancel!");
-			} else if (reservedRoom.getStatus().equals(ReservedRoomStatus.CHECKED_IN)) {
-				room.setStatus(RoomStatus.AVAILABLE);
-			}
-			reservedRoom.setStatus(ReservedRoomStatus.CANCELED);
-			break;
-			
-		default:
-			throw new InvalidStatusException("Invalid Status: " + status);
-		}
-		
-		reservedRoomRepository.save(reservedRoom);
-	}
 
 	@Override
 	public void updateReservedRoomNumber(Long id, Integer roomNumber) {
