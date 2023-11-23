@@ -1,5 +1,13 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<style>
+		a {
+            color: blue;
+            text-decoration: underline;
+        }
+	</style>
+</head>	
 <body>
 <p>Dear <span th:text="${guestInfo.getName()}"></span>,</p>
 
@@ -18,7 +26,7 @@
 
 <h4>Bank Account Information for payment:</h4>
         <ul>
-            <li>Bank Name: AAA Bank</li>
+            <li>Bank Name: XXX Bank</li>
             <li>Account Holder: Nextel Hotel</li>
             <li>Account Number: 1234567890</li>
             <li>SWIFT/BIC Code: ABCDEFGH (if applicable)</li>
@@ -33,9 +41,9 @@
 <b>You are kindly requested to settle the total cost of your reservation within the next 24 hours from the date of this notice. 
 	Failure to make the payment within this stipulated timeframe will result in the automatic cancellation of your reservation.</b>
 <br>	
-<p>Should you have any questions or require further assistance, please do not hesitate to contact our reservations team at <i>hotel@gmail.com</i>.</p>
+<p>If you have any questions or require further assistance, please do not hesitate to contact our reservations team at <i>hotel@gmail.com</i>.</p>
 <i>Thank you for choosing our hotel for your stay.</i>
 
-<p>Best regards,<br>Hotel</p>
+<p>Best regards,<br>XXHotel Reservation Deparment</p>
 </body>
 </html>
