@@ -1,6 +1,5 @@
 package com.nexcode.hbs.model.request;
 
-import java.time.Instant;
 import java.util.List;
 
 import javax.validation.constraints.NotBlank;
@@ -29,10 +28,10 @@ public class ReservationRequest {
 	private Integer totalRoom;
 	
 	@NotBlank
-	private Instant checkIn;
+	private String checkIn;
 	
 	@NotBlank
-	private Instant checkOut;
+	private String checkOut;
 	
 	@NotBlank
 	private Integer lengthOfStay;

@@ -1,6 +1,11 @@
 package com.nexcode.hbs.service.impl;
 
 import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -118,14 +123,28 @@ public class RoomTypeServiceImpl implements RoomTypeService {
 		roomTypeRepository.delete(roomType);
 	}
 
+//	@Override
+//	public List<RoomTypeAvailabilityDto> getAvailableRoomTypes(Instant checkInDate, Instant checkOutDate) {
+//
+//		if (!checkInDate.isBefore(checkOutDate)) {
+//			throw new BadRequestException("Date Invalid!");
+//		}
+//
+//		return roomTypeRepository.getAvailableRoomTypes(checkInDate, checkOutDate);
+//	}
+	
 	@Override
-	public List<RoomTypeAvailabilityDto> getAvailableRoomTypes(Instant checkInDate, Instant checkOutDate) {
+	public List<RoomTypeAvailabilityDto> getAvailableRoomTypes(String checkInDate, String checkOutDate) {
 
-		if (!checkInDate.isBefore(checkOutDate)) {
+		Instant checkInTime = convertToDateTime(checkInDate, 7, 30);
+		Instant checkOutTime = convertToDateTime(checkOutDate, 5, 30);
+		System.out.println(checkInTime.toString());
+		System.out.println(checkOutTime.toString());
+		if (!checkInTime.isBefore(checkOutTime)) {
 			throw new BadRequestException("Date Invalid!");
 		}
 
-		return roomTypeRepository.getAvailableRoomTypes(checkInDate, checkOutDate);
+		return roomTypeRepository.getAvailableRoomTypes(checkInTime, checkOutTime);
 	}
 	
 
@@ -151,5 +170,19 @@ public class RoomTypeServiceImpl implements RoomTypeService {
 	    }
 	
 	}
+	
+	public Instant convertToDateTime(String date, int hour, int minute) {
+		
+        LocalDate localDate = LocalDate.parse(date, DateTimeFormatter.ISO_LOCAL_DATE);
+        LocalDateTime dateTime = localDate.atTime(hour, minute);
+        ZonedDateTime zonedDateTime = dateTime.atZone(ZoneOffset.UTC);
+
+        Instant instant = zonedDateTime.toInstant();
+        
+//        // Convert ZonedDateTime to the desired format
+//        String formattedDateTime = DateTimeFormatter.ISO_INSTANT.format(zonedDateTime.toInstant());
+
+        return instant;
+    }
 
 }

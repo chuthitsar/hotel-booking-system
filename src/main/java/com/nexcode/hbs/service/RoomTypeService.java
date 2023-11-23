@@ -1,6 +1,5 @@
 package com.nexcode.hbs.service;
 
-import java.time.Instant;
 import java.util.List;
 
 import com.nexcode.hbs.model.dto.RoomTypeAvailabilityDto;
@@ -18,7 +17,7 @@ public interface RoomTypeService {
 
 	public void deleteRoomTypeById(Long id);
 	
-	public List<RoomTypeAvailabilityDto> getAvailableRoomTypes(Instant checkInDate, Instant checkOutDate);
+	public List<RoomTypeAvailabilityDto> getAvailableRoomTypes(String checkInDate, String checkOutDate);
 
 	public RoomTypeDto getRoomTypeByName(String roomType);
 	

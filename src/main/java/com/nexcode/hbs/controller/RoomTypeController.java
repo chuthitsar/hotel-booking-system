@@ -1,8 +1,5 @@
 package com.nexcode.hbs.controller;
 
-import java.time.Instant;
-import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
@@ -65,13 +62,24 @@ public class RoomTypeController {
 	
 	@PostMapping("/availability")
 	public ResponseEntity<List<RoomTypeAvailabilityResponse>> getRoomTypeAvailability(@RequestBody RoomTypeAvailabilityRequest request) {
-		Instant checkIn = Instant.from(DateTimeFormatter.ISO_DATE_TIME.parse(request.getCheckInTime())).atZone(ZoneId.of("UTC")).toInstant();
-	    Instant checkOut = Instant.from(DateTimeFormatter.ISO_DATE_TIME.parse(request.getCheckOutTime())).atZone(ZoneId.of("UTC")).toInstant();
+		
+		System.out.println(request.getCheckInTime());
+		System.out.println(request.getCheckOutTime());
 		
 	    return new ResponseEntity<>(
-				roomTypeAvailabilityMapper.mapToResponse(roomTypeService.getAvailableRoomTypes(checkIn, checkOut)), 
+				roomTypeAvailabilityMapper.mapToResponse(roomTypeService.getAvailableRoomTypes(request.getCheckInTime(), request.getCheckOutTime())), 
 				HttpStatus.OK);
 	}
+	
+//	@PostMapping("/availability")
+//	public ResponseEntity<List<RoomTypeAvailabilityResponse>> getTypeAvailability(@RequestBody RoomTypeAvailabilityRequest request) {
+//		Instant checkIn = Instant.from(DateTimeFormatter.ISO_DATE_TIME.parse(request.getCheckInTime())).atZone(ZoneId.of("UTC")).toInstant();
+//	    Instant checkOut = Instant.from(DateTimeFormatter.ISO_DATE_TIME.parse(request.getCheckOutTime())).atZone(ZoneId.of("UTC")).toInstant();
+//		
+//	    return new ResponseEntity<>(
+//				roomTypeAvailabilityMapper.mapToResponse(roomTypeService.getAvailableRoomTypes(checkIn, checkOut)), 
+//				HttpStatus.OK);
+//	}
 	
 	@DeleteMapping("/{id}")
 	public ResponseEntity<ApiResponse> deleteRoomTypeById(@PathVariable Long id) {

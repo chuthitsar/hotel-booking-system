@@ -77,7 +77,7 @@ public class ReservationServiceImpl implements ReservationService {
 	    reservation.setGuestInfo(guestInfo);
 	    reservation.setNumberOfGuest(reservationDto.getNumberOfGuest());
 	    reservation.setTotalRoom(reservationDto.getTotalRoom());
-	    reservation.setCheckIn(reservationDto.getCheckIn());
+	    reservation.setCheckIn((reservationDto.getCheckIn()));
 	    reservation.setCheckOut(reservationDto.getCheckOut());
 	    reservation.setLengthOfStay(reservationDto.getLengthOfStay());
 	    reservation.setTotalCost(reservationDto.getTotalCost());

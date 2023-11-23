@@ -1,5 +1,11 @@
 package com.nexcode.hbs.model.mapper.impl;
 
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,8 +49,8 @@ public class ReservationMapperImpl implements ReservationMapper {
 		guestInfoDto.setAddress(reservationRequest.getAddress());
 		
 		ReservationDto reservationDto = new ReservationDto();
-		reservationDto.setCheckIn(reservationRequest.getCheckIn());
-		reservationDto.setCheckOut(reservationRequest.getCheckOut());
+		reservationDto.setCheckIn(convertToDateTime(reservationRequest.getCheckIn(), 7, 30));
+		reservationDto.setCheckOut(convertToDateTime(reservationRequest.getCheckOut(), 5, 30));
 		reservationDto.setLengthOfStay(reservationRequest.getLengthOfStay());
 		reservationDto.setTotalCost(reservationRequest.getTotalCost());
 		reservationDto.setNumberOfGuest(reservationRequest.getNumberOfGuest());
@@ -189,5 +195,16 @@ public class ReservationMapperImpl implements ReservationMapper {
 		
 		return reservationResponse;
 	}
+	
+	public Instant convertToDateTime(String date, int hour, int minute) {
+		
+        LocalDate localDate = LocalDate.parse(date, DateTimeFormatter.ISO_LOCAL_DATE);
+        LocalDateTime dateTime = localDate.atTime(hour, minute);
+        ZonedDateTime zonedDateTime = dateTime.atZone(ZoneOffset.UTC);
+
+        Instant instant = zonedDateTime.toInstant();
+
+        return instant;
+    }
 
 }
