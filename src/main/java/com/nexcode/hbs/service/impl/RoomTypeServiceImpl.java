@@ -178,9 +178,6 @@ public class RoomTypeServiceImpl implements RoomTypeService {
         ZonedDateTime zonedDateTime = dateTime.atZone(ZoneOffset.UTC);
 
         Instant instant = zonedDateTime.toInstant();
-        
-//        // Convert ZonedDateTime to the desired format
-//        String formattedDateTime = DateTimeFormatter.ISO_INSTANT.format(zonedDateTime.toInstant());
 
         return instant;
     }
