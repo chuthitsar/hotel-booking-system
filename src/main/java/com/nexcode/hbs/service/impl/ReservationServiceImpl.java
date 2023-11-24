@@ -9,6 +9,8 @@ import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 
 import org.springframework.dao.OptimisticLockingFailureException;
@@ -56,23 +58,97 @@ public class ReservationServiceImpl implements ReservationService {
 	
 	private final ReservationMapper reservationMapper;
 	
+	@PersistenceContext
+	private final EntityManager entityManager;
+	
+//	@Override
+//	@Transactional
+//	public ReservationDto createReservation(ReservationDto reservationDto) throws Exception {
+//		
+//		if (!reservationDto.getCheckIn().isBefore(reservationDto.getCheckOut())) {
+//			throw new BadRequestException("Date Invalid!");
+//		}
+//		
+//		GuestInfoDto guestInfoDto = reservationDto.getGuestInfo();
+//		GuestInfo guestInfo = new GuestInfo();
+//	    guestInfo.setName(guestInfoDto.getName());
+//	    guestInfo.setEmail(guestInfoDto.getEmail());
+//	    guestInfo.setPhone(guestInfoDto.getPhone());
+//	    guestInfo.setAddress(guestInfoDto.getAddress());
+//
+//	    guestInfo = guestInfoRepository.save(guestInfo);
+//	    
+//	    Reservation reservation = new Reservation();
+//	    reservation.setGuestInfo(guestInfo);
+//	    reservation.setNumberOfGuest(reservationDto.getNumberOfGuest());
+//	    reservation.setTotalRoom(reservationDto.getTotalRoom());
+//	    reservation.setCheckIn((reservationDto.getCheckIn()));
+//	    reservation.setCheckOut(reservationDto.getCheckOut());
+//	    reservation.setLengthOfStay(reservationDto.getLengthOfStay());
+//	    reservation.setTotalCost(reservationDto.getTotalCost());
+//	    reservation.setIsPaid(false);
+//	    reservation.setSpecialRequest(reservationDto.getSpecialRequest());
+//	    reservation.setExpiredAt(Instant.now().plus(24, ChronoUnit.HOURS));
+//	    reservation.setIsExpired(false);
+//	    reservation.setStatus(ReservationStatus.PENDING);
+//	    
+//	    reservation = reservationRepository.save(reservation);
+//	    
+//	    List<String> selectedRooms = reservationDto.getSelectedRooms();
+//	    
+//	    try {
+//	    for (String roomType: selectedRooms) {
+//	    	
+//	    	List<Room> rooms = roomRepository.findAvailableRoomsByTypeAndDate(roomType, reservation.getCheckIn(), reservation.getCheckOut());
+//
+//	    	if (rooms.isEmpty()) {
+//	    		throw new BadRequestException("The selected room is not available anymore. Reservation Failed!");
+//	    	}
+//	    	
+//	    	Room room = rooms.get(0);
+//	    	entityManager.lock(room, LockModeType.PESSIMISTIC_WRITE);
+//	    	//roomRepository.save(room);
+//	    	ReservedRoom reservedRoom = new ReservedRoom();
+//	    	reservedRoom.setRoom(room);
+//	    	reservedRoom.setReservation(reservation);
+//	    	reservedRoom.setCheckIn(reservation.getCheckIn());
+//	    	reservedRoom.setCheckOut(reservation.getCheckOut());
+//	    	reservedRoom.setPricePerNight(room.getType().getPricePerNight());
+//	    	reservedRoom.setStatus(ReservedRoomStatus.PENDING);
+//	    	reservedRoomRepository.save(reservedRoom);
+//	    	entityManager.flush();
+//	    }
+//        
+//	    
+//            sendMail(guestInfo, reservation, "Reservation Details", "reservation-confirmation");
+//        } catch (OptimisticLockingFailureException e) {
+//            throw new BadRequestException("The reservation was updated by another transaction. Please try again.", e);
+//        } catch (Exception e) {
+//            throw new Exception("Failed to save the reservation. Please try again.", e);
+//        }
+//	    
+//	    ReservationDto createdReservationDto = reservationMapper.mapToDto(reservation);
+//	    createdReservationDto.setSelectedRooms(selectedRooms);
+//	    return createdReservationDto;
+//		
+//	}
+	
 	@Override
 	@Transactional
 	public ReservationDto createReservation(ReservationDto reservationDto) throws Exception {
-		
-		if (!reservationDto.getCheckIn().isBefore(reservationDto.getCheckOut())) {
-			throw new BadRequestException("Date Invalid!");
-		}
-		
-		GuestInfoDto guestInfoDto = reservationDto.getGuestInfo();
-		GuestInfo guestInfo = new GuestInfo();
+	    if (!reservationDto.getCheckIn().isBefore(reservationDto.getCheckOut())) {
+	        throw new BadRequestException("Invalid date!");
+	    }
+
+	    GuestInfoDto guestInfoDto = reservationDto.getGuestInfo();
+	    GuestInfo guestInfo = new GuestInfo();
 	    guestInfo.setName(guestInfoDto.getName());
 	    guestInfo.setEmail(guestInfoDto.getEmail());
 	    guestInfo.setPhone(guestInfoDto.getPhone());
 	    guestInfo.setAddress(guestInfoDto.getAddress());
 
 	    guestInfo = guestInfoRepository.save(guestInfo);
-	    
+
 	    Reservation reservation = new Reservation();
 	    reservation.setGuestInfo(guestInfo);
 	    reservation.setNumberOfGuest(reservationDto.getNumberOfGuest());
@@ -86,43 +162,61 @@ public class ReservationServiceImpl implements ReservationService {
 	    reservation.setExpiredAt(Instant.now().plus(24, ChronoUnit.HOURS));
 	    reservation.setIsExpired(false);
 	    reservation.setStatus(ReservationStatus.PENDING);
-	    
-	    reservation = reservationRepository.save(reservation);
-	    
-	    List<String> selectedRooms = reservationDto.getSelectedRooms();
-	    
-	    for (String roomType: selectedRooms) {
-	    	
-	    	List<Room> rooms = roomRepository.findAvailableRoomsByTypeAndDate(roomType, reservation.getCheckIn(), reservation.getCheckOut());
 
-	    	if (rooms.isEmpty()) {
-	    		throw new BadRequestException("The selected room is not available anymore. Reservation Failed!");
-	    	}
-	    	
-	    	Room room = rooms.get(0);
-	    	ReservedRoom reservedRoom = new ReservedRoom();
-	    	reservedRoom.setRoom(room);
-	    	reservedRoom.setReservation(reservation);
-	    	reservedRoom.setCheckIn(reservation.getCheckIn());
-	    	reservedRoom.setCheckOut(reservation.getCheckOut());
-	    	reservedRoom.setPricePerNight(room.getType().getPricePerNight());
-	    	reservedRoom.setStatus(ReservedRoomStatus.PENDING);
-	    	reservedRoomRepository.save(reservedRoom);
-	    }
-        
-	    try {
-            sendMail(guestInfo, reservation, "Reservation Details", "reservation-confirmation");
-        } catch (OptimisticLockingFailureException e) {
-            throw new Exception("The reservation was updated by another transaction. Please try again.", e);
-        } catch (Exception e) {
-            throw new Exception("Failed to save the reservation. Please try again.", e);
-        }
+	    reservation = reservationRepository.save(reservation);
+
+	    List<String> selectedRooms = reservationDto.getSelectedRooms();
+
 	    
+	        for (String roomType : selectedRooms) {
+	        	List<Room> rooms = roomRepository.findAvailableRoomsByTypeAndDate(roomType, reservation.getCheckIn(), reservation.getCheckOut());
+	        	
+				if (rooms.isEmpty()) {
+					throw new BadRequestException("The selected room is not available anymore. Reservation Failed!");
+				}
+
+				Room room = rooms.get(0);
+
+	            ReservedRoom reservedRoom = new ReservedRoom();
+	            reservedRoom.setRoom(room);
+	            reservedRoom.setReservation(reservation);
+	            reservedRoom.setCheckIn(reservation.getCheckIn());
+	            reservedRoom.setCheckOut(reservation.getCheckOut());
+	            reservedRoom.setPricePerNight(room.getType().getPricePerNight());
+	            reservedRoom.setStatus(ReservedRoomStatus.PENDING);
+	            System.out.println(reservation.getId());
+	            System.out.println(room.getId());
+	            System.out.println(reservation.getCheckIn().toString());
+	            System.out.println(reservation.getCheckOut().toString());
+	            System.out.println(reservedRoomRepository.existsReservedRoomForDateRange(room.getId(), reservation.getCheckIn(), reservation.getCheckOut()));
+	            
+	            if (reservedRoomRepository.existsReservedRoomForDateRange(room.getId(), reservation.getCheckIn(), reservation.getCheckOut())) {
+	            	System.out.println(reservation.getId());
+	            	System.out.println(reservedRoomRepository.existsReservedRoomForDateRange(room.getId(), reservation.getCheckIn(), reservation.getCheckOut()));
+	            	throw new BadRequestException("The selected room is not available anymore. Reservation Failed!");
+	            }
+	            reservedRoomRepository.save(reservedRoom);
+	            System.out.println(reservation.getId());
+	            System.out.println(room.getId());
+	            System.out.println(reservation.getCheckIn().toString());
+	            System.out.println(reservation.getCheckOut().toString());
+	            System.out.println(reservedRoomRepository.existsReservedRoomForDateRange(room.getId(), reservation.getCheckIn(), reservation.getCheckOut()));
+	        }
+
+	    try {
+	        sendMail(guestInfo, reservation, "Reservation Details", "reservation-confirmation");
+	    } catch (OptimisticLockingFailureException e) {
+	        throw new BadRequestException("The reservation was updated by another transaction. Please try again.", e);
+	    } 
+//	    catch (Exception e) {
+//	        throw new Exception("Failed to save the reservation. Please try again.", e);
+//	    }
+
 	    ReservationDto createdReservationDto = reservationMapper.mapToDto(reservation);
 	    createdReservationDto.setSelectedRooms(selectedRooms);
 	    return createdReservationDto;
-		
 	}
+
 
 	private void sendMail(GuestInfo guestInfo, Reservation reservation, String subject, String mailContent) {
 		
@@ -194,6 +288,7 @@ public class ReservationServiceImpl implements ReservationService {
 		LocalDate reservationDateFormat = null;
 		LocalDate checkIn = null;
 		LocalDate checkOut = null;
+		
 		if (reservationDate != null) {
 			reservationDateFormat = LocalDate.parse(reservationDate, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 		}

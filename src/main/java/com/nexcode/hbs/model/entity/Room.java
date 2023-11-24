@@ -14,6 +14,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Version;
 
 import com.nexcode.hbs.model.entity.status.RoomStatus;
 
@@ -55,4 +56,7 @@ public class Room {
 	
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "room")
 	private List<OccupiedRoom> occupiedRooms;
+	
+	@Version
+	private Long version;
 }

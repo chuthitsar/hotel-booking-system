@@ -12,6 +12,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Version;
 
 import com.nexcode.hbs.model.entity.status.ReservedRoomStatus;
 
@@ -51,5 +52,10 @@ public class ReservedRoom {
 	@Enumerated(EnumType.STRING)
 	@Column(name = "status")
 	private ReservedRoomStatus status;
+	
+	
+	@Version
+	@Column(name="version",columnDefinition = "integer default 0")
+	private Long version;
 	
 }

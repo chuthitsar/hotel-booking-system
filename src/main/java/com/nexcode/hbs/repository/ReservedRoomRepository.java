@@ -40,4 +40,20 @@ public interface ReservedRoomRepository extends JpaRepository<ReservedRoom, Long
 
 	ReservedRoom findByRoomAndStatus(Room room, ReservedRoomStatus status);
 
+	@Query("SELECT COUNT(rr.id) > 0 FROM ReservedRoom rr " +
+	           "WHERE rr.room.id = :roomId " +
+	           "AND rr.status IN ('PENDING', 'CONFIRMED') " +
+	           "AND (:checkIn <= rr.checkOut AND :checkOut >= rr.checkIn)")
+	boolean existsReservedRoomForDateRange(Long roomId, Instant checkIn, Instant checkOut);
+
+	@Query("SELECT rr FROM ReservedRoom rr " +
+	           "WHERE rr.room.id = :roomId " +
+	           "AND rr.status IN ('PENDING', 'CONFIRMED') " +
+	           "AND (:checkIn <= rr.checkOut AND :checkOut >= rr.checkIn)")
+	List<ReservedRoom> findConflictingReservedRooms(Long roomId, Instant checkIn, Instant checkOut);
+
+	
+	@Query(value = "SELECT rr FROM ReservedRoom rr WHERE rr.room=:room AND rr.status=:pending AND rr.checkIn=:checkIn AND rr.checkOut=:checkOut")
+	List<ReservedRoom> findByRoomAndStatus(Room room, ReservedRoomStatus pending, Instant checkIn, Instant checkOut);
+
 }

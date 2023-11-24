@@ -4,8 +4,13 @@ import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
+import javax.persistence.LockModeType;
+import javax.persistence.QueryHint;
+
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.jpa.repository.QueryHints;
 import org.springframework.data.repository.query.Param;
 
 import com.nexcode.hbs.model.dto.RoomTypeAvailabilityDto;
@@ -96,4 +101,32 @@ public interface RoomRepository extends JpaRepository<Room, Long> {
 
 	Long countByStatus(RoomStatus available);
 
+	@Lock(LockModeType.PESSIMISTIC_READ)
+	@QueryHints({@QueryHint(name = "jakarta.persistence.lock.timeout", value = "3000")})
+	@Query("SELECT r FROM Room r "
+			+ "WHERE r.type.name = :roomType "
+			+ "AND r.status NOT IN ('UNAVAILABLE', 'MAINTAINED') "
+			+ "AND r NOT IN "
+		    + "(SELECT rr.room FROM ReservedRoom rr "
+		    	+ "WHERE (rr.status IN ('PENDING', 'CONFIRMED')) "
+		    	+ "AND (:checkIn <= rr.checkOut AND :checkOut >= rr.checkIn)) "
+		    + "AND r NOT IN "
+	        + "(SELECT o.room FROM OccupiedRoom o "
+	            + "WHERE o.isCompleted = false "
+	            + "AND (:checkIn <= o.checkOut AND :checkOut >= o.checkIn))")
+	Room findAvailableRoomForReservationWithPessimisticWriteLock(String roomType, Instant checkIn, Instant checkOut);
+
+//	@Query(value = "SELECT * FROM rooms r "
+//			+ "WHERE r.room_type_id = "
+//			+ "(SELECT id FROM room_types "
+//			+ "WHERE name = :roomType) AND r.status NOT IN ('UNAVAILABLE', 'MAINTAINED') "
+//			+ "AND r.id NOT IN "
+//			+ "(SELECT rr.room_id FROM reserved_rooms rr "
+//			+ "WHERE (rr.status IN ('PENDING', 'CONFIRMED')) "
+//			+ "AND (:checkIn <= rr.check_out AND :checkOut >= rr.check_in)) "
+//			+ "AND r.id NOT IN "
+//			+ "(SELECT o.room_id FROM occupied_rooms o "
+//			+ "WHERE o.is_completed = false "
+//			+ "AND (:checkIn <= o.check_out AND :checkOut >= o.check_in))", nativeQuery = true)
+//	Room findAvailableRoomForReservationWithPessimisticWriteLock(String roomType, Instant checkIn, Instant checkOut);
 }

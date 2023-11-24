@@ -23,7 +23,7 @@ public class MailServiceImpl implements MailService {
 	public void sendMail(String to, String subject, Context context, String mailContent) {
 		 MimeMessagePreparator messagePreparator = mimeMessage -> {
 	            MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessage);
-	            messageHelper.setFrom("lialim000@gmail.com");
+	            messageHelper.setFrom("nextel2023.mm@gmail.com");
 	            messageHelper.setTo(to);
 	            messageHelper.setSubject(subject);
 	            String content = templateEngine.process(mailContent, context);
