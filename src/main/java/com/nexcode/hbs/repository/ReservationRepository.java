@@ -55,4 +55,16 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
 	Optional<Reservation> findByReservationID(String reservationId);
 
 	Long countByStatus(ReservationStatus status);
+	
+	@Query("SELECT r FROM Reservation r WHERE r.createdAt >= :fiveSecondsAgo " +
+            "AND r.id <> :lastReservationId "
+            + "AND (:checkIn <= r.checkOut AND :checkOut >= r.checkIn)")
+    List<Reservation> findReservationsWithinLast5SecondsAndCheckInOutRangeExcludingLast(
+            @Param("fiveSecondsAgo") Instant fiveSecondsAgo,
+            @Param("checkIn") Instant checkIn,
+            @Param("checkOut") Instant checkOut,
+            @Param("lastReservationId") Long reservationId
+    );
+
+	List<Reservation> getByStatus(ReservationStatus pending);
 }

@@ -52,10 +52,10 @@ public class ReservedRoom {
 	@Enumerated(EnumType.STRING)
 	@Column(name = "status")
 	private ReservedRoomStatus status;
-	
+
 	
 	@Version
-	@Column(name="version",columnDefinition = "integer default 0")
+	@Column(name="version", columnDefinition = "integer default 0")
 	private Long version;
 	
 }

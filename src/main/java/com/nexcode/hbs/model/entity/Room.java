@@ -57,6 +57,9 @@ public class Room {
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "room")
 	private List<OccupiedRoom> occupiedRooms;
 	
+	@Column(name = "rent_count", columnDefinition = "integer default 0")
+	private Integer rent;
+	
 	@Version
 	private Long version;
 }

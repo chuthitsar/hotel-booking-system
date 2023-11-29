@@ -62,29 +62,29 @@ public class ReservationController {
 
 		ReservationDto reservationDto = reservationMapper.mapToDto(reservationRequest);
 
-		for (String roomType : reservationRequest.getSelectedRooms()) {
-			List<Room> rooms = roomRepository.findAvailableRoomsByTypeAndDate(roomType, reservationDto.getCheckIn(),
-					reservationDto.getCheckOut());
-
-			if (rooms.isEmpty()) {
-				throw new BadRequestException("The selected room is not available anymore. Reservation Failed!");
-			}
-
-			Room room = rooms.get(0);
-//			if (reservedRoomRepository.existsReservedRoomForDateRange(room.getId(), reservationDto.getCheckIn(),
-//					reservationDto.getCheckOut())) {
-//				// System.out.println(reservation.getId());
-//				System.out.println(reservedRoomRepository.existsReservedRoomForDateRange(room.getId(),
-//						reservationDto.getCheckIn(), reservationDto.getCheckOut()));
+//		for (String roomType : reservationRequest.getSelectedRooms()) {
+//			List<Room> rooms = roomRepository.findAvailableRoomsByTypeAndDate(roomType, reservationDto.getCheckIn(),
+//					reservationDto.getCheckOut());
+//
+//			if (rooms.isEmpty()) {
 //				throw new BadRequestException("The selected room is not available anymore. Reservation Failed!");
 //			}
-			
-				List<ReservedRoom> rRooms = reservedRoomRepository.findByRoomAndStatus(room, ReservedRoomStatus.PENDING,reservationDto.getCheckIn(),reservationDto.getCheckOut());
-				
-			if(!rRooms.isEmpty()) {
-				throw new BadRequestException("The selected room is not available anymore. Reservation Failed!");
-			}
-		}
+//
+//			Room room = rooms.get(0);
+////			if (reservedRoomRepository.existsReservedRoomForDateRange(room.getId(), reservationDto.getCheckIn(),
+////					reservationDto.getCheckOut())) {
+////				// System.out.println(reservation.getId());
+////				System.out.println(reservedRoomRepository.existsReservedRoomForDateRange(room.getId(),
+////						reservationDto.getCheckIn(), reservationDto.getCheckOut()));
+////				throw new BadRequestException("The selected room is not available anymore. Reservation Failed!");
+////			}
+//			
+//				List<ReservedRoom> rRooms = reservedRoomRepository.findByRoomAndStatus(room, ReservedRoomStatus.PENDING,reservationDto.getCheckIn(),reservationDto.getCheckOut());
+//				
+//			if(!rRooms.isEmpty()) {
+//				throw new BadRequestException("The selected room is not available anymore. Reservation Failed!");
+//			}
+//		}
 
 		ReservationDto dto = reservationService.createReservation(reservationDto);
 //		return new ResponseEntity<>(new ApiResponse(true, "Reservation Successful!"), HttpStatus.CREATED);

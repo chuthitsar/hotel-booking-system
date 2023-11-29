@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import com.nexcode.hbs.model.entity.ReservedRoom;
 import com.nexcode.hbs.model.entity.Room;
@@ -41,10 +42,10 @@ public interface ReservedRoomRepository extends JpaRepository<ReservedRoom, Long
 	ReservedRoom findByRoomAndStatus(Room room, ReservedRoomStatus status);
 
 	@Query("SELECT COUNT(rr.id) > 0 FROM ReservedRoom rr " +
-	           "WHERE rr.room.id = :roomId " +
+	           "WHERE rr.room = :room " +
 	           "AND rr.status IN ('PENDING', 'CONFIRMED') " +
 	           "AND (:checkIn <= rr.checkOut AND :checkOut >= rr.checkIn)")
-	boolean existsReservedRoomForDateRange(Long roomId, Instant checkIn, Instant checkOut);
+	boolean existsReservedRoomForDateRange(Room room, Instant checkIn, Instant checkOut);
 
 	@Query("SELECT rr FROM ReservedRoom rr " +
 	           "WHERE rr.room.id = :roomId " +
@@ -56,4 +57,16 @@ public interface ReservedRoomRepository extends JpaRepository<ReservedRoom, Long
 	@Query(value = "SELECT rr FROM ReservedRoom rr WHERE rr.room=:room AND rr.status=:pending AND rr.checkIn=:checkIn AND rr.checkOut=:checkOut")
 	List<ReservedRoom> findByRoomAndStatus(Room room, ReservedRoomStatus pending, Instant checkIn, Instant checkOut);
 
+	@Query("SELECT COUNT(rr.id) > 0 FROM ReservedRoom rr " +
+	           "WHERE rr.room.id = :roomId " +
+	           "AND rr.reservation.id <> :reservationId " +
+	           "AND rr.status IN ('PENDING', 'CONFIRMED') " +
+	           "AND (:checkIn <= rr.checkOut AND :checkOut >= rr.checkIn)")
+	boolean existsOverlappingReservedRoomsForRoom(
+				Long reservationId,
+		        @Param("roomId") Long roomId,
+		        @Param("checkIn") Instant checkIn,
+		        @Param("checkOut") Instant checkOut);
+
+	List<ReservedRoom> getByStatus(ReservedRoomStatus pending);
 }

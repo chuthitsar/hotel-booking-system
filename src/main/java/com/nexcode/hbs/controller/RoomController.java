@@ -76,7 +76,7 @@ public class RoomController {
 		return new ResponseEntity<>(new ApiResponse(true, "Room deleted successfully."), HttpStatus.OK);
 	}
 	
-	@GetMapping("/available-rooms")
+	@PostMapping("/available-rooms")
 	public ResponseEntity<List<RoomResponse>> getAvailableRooms(@RequestBody AvailableRoomRequest request) {
 		List<RoomDto> roomDto = roomService.getAvailableRoomsByDate(request.getReservationId());
 		return ResponseEntity.ok(roomMapper.mapToResponse(roomDto));
