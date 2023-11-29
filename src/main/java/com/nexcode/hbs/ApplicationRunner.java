@@ -59,13 +59,13 @@ public class ApplicationRunner implements CommandLineRunner {
 		
 		if(amenityRepository.count() == 0) {
 			List<Amenity> amenities = new ArrayList<>();
-			List<String> amenityNames = List.of("Comfortable Beds", "Private Bathroom", "Towels and Toiletries", "Wi-Fi", "Television", "Air Conditioning/Heating", "Safety Deposit Box", "Mini-Fridge", "Coffee/Tea Maker", "Room Service", 
-												"Breakfast", "Garden View", "Sea View", "24-Hour Front Desk", "Parking", "Elevator", "Fitness Center", "Swimming Pool", "Fine Dining Area", 
-												"Laundry Facilities", "Ironing Facilities", "Separate Living Room", "Wake-Up Service", "Concierge Services", "Shuttle Service", "Business Center", "Kitchenette", "In-Room Jacuzzi", "Private Bar");
+			List<String> amenityNames = List.of("Comfortable Beds", "Towels and Toiletries", "Housekeeping", "Elevator", "Wake-up Service", "Kitchenette", "Concierge Service", "Private Meeting Room", "Garden View", 
+					"Private Bathroom", "Television", "Breakfast", "Min-fridge", "In-room Jacuzzi", "Shuttle Service", "Private Living Room", "Pool", "Safety Deposit Box", "Wi-fi", "Air-conditioning/Heating", 
+					"Room Service", "Chair", "Dinner", "Coffee/Tea Maker", "Ironing Facilities", "Laundry Facilities", "Fitness Center", "City View", "Electric Kettle");
 			
-			List<String> amenityIcons = List.of("Comfortable Beds", "Private Bathroom", "Towels and Toiletries", "Wi-Fi", "Television", "Air Conditioning/Heating", "Safety Deposit Box", "Mini-Fridge", "Coffee/Tea Maker", "Room Service", 
-												"Breakfast", "Garden View", "Sea View", "24-Hour Front Desk", "Parking", "Elevator", "Fitness Center", "Swimming Pool", "Fine Dining Area", 
-												"Laundry Facilities", "Ironing Facilities", "Separate Living Room", "Wake-Up Service", "Concierge Services", "Shuttle Service", "Business Center", "Kitchenette", "In-Room Jacuzzi", "Private Bar");
+			List<String> amenityIcons = List.of("bed", "dry_cleaning", "cleaning_services", "elevator", "alarm_smart_wake", "countertops", "concierge", "meeting_room", "home_and_garden",
+					"bathroom", "tv", "brunch_dining", "kitchen", "hot_tub", "airport_suttle", "living", "pool", "enhanced_encryption", "wifi", "heat_pump",
+					"room_service", "chair", "dining", "coffee_maker", "iron", "locl_laundry_service", "fitness_center", "apartment", "kettle");
 			
 			for (int i = 0; i < amenityNames.size(); i++) {
 			    String amenityName = amenityNames.get(i);
