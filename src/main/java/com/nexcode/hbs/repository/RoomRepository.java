@@ -72,7 +72,7 @@ public interface RoomRepository extends JpaRepository<Room, Long> {
 			@Param("checkIn") Instant checkIn, @Param("checkOut") Instant checkOut);
 	
 	@Lock(LockModeType.PESSIMISTIC_FORCE_INCREMENT)
-	@QueryHints({@QueryHint(name = "jakarta.persistence.lock.timeout", value = "3000")})
+	@QueryHints({@QueryHint(name = "jakarta.persistence.lock.timeout", value = "1000")})
 	@Query("SELECT r FROM Room r "
 				+ "WHERE r.type.name = :roomType "
 				+ "AND r.status NOT IN ('UNAVAILABLE', 'MAINTAINED') "
@@ -117,19 +117,4 @@ public interface RoomRepository extends JpaRepository<Room, Long> {
 	List<Room> findAvailableRoomsByDate(Instant checkIn, Instant checkOut);
 
 	Long countByStatus(RoomStatus available);
-
-	@Lock(LockModeType.PESSIMISTIC_READ)
-	@QueryHints({@QueryHint(name = "jakarta.persistence.lock.timeout", value = "3000")})
-	@Query("SELECT r FROM Room r "
-			+ "WHERE r.type.name = :roomType "
-			+ "AND r.status NOT IN ('UNAVAILABLE', 'MAINTAINED') "
-			+ "AND r NOT IN "
-		    + "(SELECT rr.room FROM ReservedRoom rr "
-		    	+ "WHERE (rr.status IN ('PENDING', 'CONFIRMED')) "
-		    	+ "AND (:checkIn <= rr.checkOut AND :checkOut >= rr.checkIn)) "
-		    + "AND r NOT IN "
-	        + "(SELECT o.room FROM OccupiedRoom o "
-	            + "WHERE o.isCompleted = false "
-	            + "AND (:checkIn <= o.checkOut AND :checkOut >= o.checkIn))")
-	Room findAvailableRoomForReservationWithPessimisticWriteLock(String roomType, Instant checkIn, Instant checkOut);
 }

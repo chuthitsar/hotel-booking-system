@@ -126,22 +126,6 @@ public class RoomServiceImpl implements RoomService {
 			room.setType(roomType);
 		}
 		
-//		if (room.getStatus() == RoomStatus.OCCUPIED && !roomDto.getStatusName().equals("OCCUPIED")) {
-//			throw new BadRequestException("The room is already occupied! Cannot change the occupied room status.");
-//		} else if (room.getStatus() != RoomStatus.OCCUPIED && roomDto.getStatusName().equals("OCCUPIED")) {
-//			throw new BadRequestException("The room status cannot be changed to OCCUPIED!");
-//		} else if (roomDto.getStatusName().equals("UNAVAILABLE")) {
-//			if(!room.getReservedRooms().isEmpty()) {
-//				throw new BadRequestException("The room status cannot be changed to UNAVAILABLE!");
-//			}
-//		}
-//
-//		try {
-//	        room.setStatus(RoomStatus.valueOf(roomDto.getStatusName()));
-//	    } catch (IllegalArgumentException e) {
-//	        throw new InvalidStatusException("Invalid room status: " + roomDto.getStatusName());
-//	    }
-		
 		room.setFloor(roomDto.getFloor());
 
 		roomRepository.save(room);

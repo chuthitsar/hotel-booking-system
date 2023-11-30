@@ -34,4 +34,6 @@ public interface ReservationService {
 
 	ReservationDto getCompletedReservationById(Long id);
 
+	void checkReservationByID(String reservationId);
+
 }

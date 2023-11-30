@@ -17,8 +17,8 @@
 <ul>
     <li>Number of guests: <span th:text="${reservation.getNumberOfGuest()}"></span></li>
     <li>Total room: <span th:text="${reservation.getTotalRoom()}"></span></li>
-    <li>Check-in date: <span th:text="${#dates.format(reservation.getCheckIn(), 'dd/MM/yyyy HH:mm:ss')}"></span></li>
-    <li>Check-out date: <span th:text="${#dates.format(reservation.getCheckOut(), 'dd/MM/yyyy HH:mm:ss')}"></span></li>
+    <li>Check-In date: <span th:text="${#dates.format(reservation.getCheckIn(), 'dd/MM/yyyy HH:mm:ss')}"></span></li>
+	<li>Check-out date: <span th:text="${#dates.format(reservation.getCheckOut(), 'dd/MM/yyyy HH:mm:ss')}"></span></li>
     <li>Length of stay: <span th:text="${reservation.getLengthOfStay()}"></span></li>
     <li>Total cost: <span th:text="${reservation.getTotalCost()}"></span></li>
     <li>Special request: <span th:text="${reservation.getSpecialRequest()}"></span></li>

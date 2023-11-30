@@ -16,11 +16,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.nexcode.hbs.model.dto.ReservationDto;
 import com.nexcode.hbs.model.dto.ReservedRoomDto;
-import com.nexcode.hbs.model.entity.ReservedRoom;
-import com.nexcode.hbs.model.entity.Room;
-import com.nexcode.hbs.model.entity.status.ReservationStatus;
-import com.nexcode.hbs.model.entity.status.ReservedRoomStatus;
-import com.nexcode.hbs.model.exception.BadRequestException;
 import com.nexcode.hbs.model.exception.InvalidStatusException;
 import com.nexcode.hbs.model.mapper.ReservationMapper;
 import com.nexcode.hbs.model.mapper.ReservedRoomMapper;
@@ -32,8 +27,6 @@ import com.nexcode.hbs.model.response.DailyIncomeForMonthResponse;
 import com.nexcode.hbs.model.response.ReservationDetailsResponse;
 import com.nexcode.hbs.model.response.ReservationResponse;
 import com.nexcode.hbs.model.response.ReservedRoomResponse;
-import com.nexcode.hbs.repository.ReservedRoomRepository;
-import com.nexcode.hbs.repository.RoomRepository;
 import com.nexcode.hbs.service.ReservationService;
 import com.nexcode.hbs.service.ReservedRoomService;
 
@@ -51,10 +44,6 @@ public class ReservationController {
 	private final ReservationMapper reservationMapper;
 
 	private final ReservedRoomMapper reservedRoomMapper;
-
-	private final RoomRepository roomRepository;
-
-	private final ReservedRoomRepository reservedRoomRepository;
 
 	@PostMapping
 	public ResponseEntity<ReservationDetailsResponse> createReservation(

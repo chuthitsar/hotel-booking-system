@@ -14,11 +14,17 @@ import com.nexcode.hbs.security.UserPrincipal;
 import com.nexcode.hbs.service.JwtService;
 
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.UnsupportedJwtException;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import io.jsonwebtoken.security.SignatureException;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Service
 public class JwtServiceImpl implements JwtService{
 	
@@ -38,19 +44,36 @@ public class JwtServiceImpl implements JwtService{
 
 	@Override
 	public boolean isTokenValid(String jwt) {
-		return !isTokenExpired(jwt);
+		try {
+			Jwts.parserBuilder().setSigningKey(getSigningKey()).build()
+			.parseClaimsJws(jwt).getBody();
+			return true;
+		} catch (SignatureException e) {
+			log.error("Invalid JWT signature -> Message: {} ", e.getMessage());
+		} catch (MalformedJwtException e) {
+			log.error("Invalid JWT token -> Message: {} ", e.getMessage());
+		} catch (ExpiredJwtException e) {
+			log.error("Expired JWT token -> Message: {} ", e.getMessage());
+		} catch (UnsupportedJwtException e) {
+			log.error("Unsupported JWT token -> Message: {} ", e.getMessage());
+		} catch (IllegalArgumentException e) {
+			log.error("JWT claims string is empty -> Message: {} ", e.getMessage());
+		}
+		return false;
+		
 	}
 	
-	private boolean isTokenExpired(String jwt) {
-		return extractExpiration(jwt).before(new Date());
-	}
+//	private boolean isTokenExpired(String jwt) {
+//		return extractExpiration(jwt).before(new Date());
+//	}
 	
-	private Date extractExpiration(String jwt) {
-		return getClaims(jwt).getExpiration();
-	}
+//	private Date extractExpiration(String jwt) {
+//		return getClaims(jwt).getExpiration();
+//	}
 	
 	@Override
 	public Claims getClaims(String jwt) {
+		
 		return Jwts.parserBuilder().setSigningKey(getSigningKey()).build()
 				.parseClaimsJws(jwt).getBody();
 	}

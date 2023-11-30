@@ -21,6 +21,7 @@ import com.nexcode.hbs.model.request.MultipleRoomRequest;
 import com.nexcode.hbs.model.request.RoomRequest;
 import com.nexcode.hbs.model.response.ApiResponse;
 import com.nexcode.hbs.model.response.RoomResponse;
+import com.nexcode.hbs.service.ReservationService;
 import com.nexcode.hbs.service.RoomService;
 
 import lombok.RequiredArgsConstructor;
@@ -31,6 +32,8 @@ import lombok.RequiredArgsConstructor;
 public class RoomController {
 
 	private final RoomService roomService;
+	
+	private final ReservationService reservationService;
 	
 	private final RoomMapper roomMapper;
 	
@@ -77,8 +80,14 @@ public class RoomController {
 	}
 	
 	@PostMapping("/available-rooms")
-	public ResponseEntity<List<RoomResponse>> getAvailableRooms(@RequestBody AvailableRoomRequest request) {
-		List<RoomDto> roomDto = roomService.getAvailableRoomsByDate(request.getReservationId());
+	public ResponseEntity<ApiResponse> checkReservationById(@RequestBody AvailableRoomRequest request) {
+		reservationService.checkReservationByID(request.getReservationId());
+		return new ResponseEntity<>(new ApiResponse(true, "Reservation exists!"), HttpStatus.OK);
+	}
+	
+	@GetMapping("/available-rooms/{id}")
+	public ResponseEntity<List<RoomResponse>> getAvailableRooms(@PathVariable String id) {
+		List<RoomDto> roomDto = roomService.getAvailableRoomsByDate(id);
 		return ResponseEntity.ok(roomMapper.mapToResponse(roomDto));
 	}
 	

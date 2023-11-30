@@ -11,8 +11,8 @@
 <ul>
     <li>Reservation ID: <span th:text="${reservation.reservationID}"></span></li>
     <li>Guest Name: <span th:text="${guestInfo.name}"></span></li>
-    <li>Check-in date: <span th:text="${#dates.format(reservation.checkIn, 'dd/MM/yyyy HH:mm:ss')}"></span></li>
-    <li>Check-out date: <span th:text="${#dates.format(reservation.checkOut, 'dd/MM/yyyy HH:mm:ss')}"></span></li>
+    <li>Check-in date: <span th:text="${#temporals.format(reservation.checkIn.atZone(ZoneId.of('Asia/Yangon')), 'dd/MM/yyyy hh:mm:ss a', 'MM/dd/yyyy hh:mm:ss a')}"></span></li>
+	<li>Check-out date: <span th:text="${#temporals.format(reservation.checkOut.atZone(ZoneId.of('Asia/Yangon')), 'dd/MM/yyyy hh:mm:ss a', 'MM/dd/yyyy hh:mm:ss a')}"></span></li>
 </ul>
 
 <p>We're sorry to see you go and we hope to see you again in the future.</p>

@@ -38,22 +38,22 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 		final String username;
 		final String roles;
 		
-		if(authHeader == null || !authHeader.startsWith("Bearer ")) {
+		if (authHeader == null || !authHeader.startsWith("Bearer ")) {
 			filterChain.doFilter(request, response);
 			return;
 		}
 		
 		jwt = authHeader.replace("Bearer", "");
-		username = jwtService.extractUsername(jwt);
 		
-		if(username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+		if (SecurityContextHolder.getContext().getAuthentication() == null) {
 			
 			if(jwtService.isTokenValid(jwt)) {
+				username = jwtService.extractUsername(jwt);
+				
 				Claims claims = jwtService.getClaims(jwt);
 				roles = claims.get("roles", String.class);
 				Long userId = Long.parseLong(claims.getId());
 				List<String> authorityArray = Arrays.asList(roles.split(","));
-				
 				
 				List<GrantedAuthority> authorities = authorityArray.stream()
 						.map(role -> new SimpleGrantedAuthority(role)).collect(Collectors.toList());
@@ -71,7 +71,4 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 		}
 		filterChain.doFilter(request, response);
 	}
-
-	
-
 }

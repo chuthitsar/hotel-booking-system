@@ -13,9 +13,9 @@ public class WebMvcConfig implements WebMvcConfigurer {
 
 	@Override
 	public void addCorsMappings(CorsRegistry registry) {
-		registry.addMapping("/**").allowedOrigins("http://localhost:5173", "http://localhost:5174", "http://127.0.0.1:4040", "https://2110-104-28-251-152.ngrok-free.app")
-				.allowedMethods("HEAD", "OPTIONS", "GET", "POST", "PUT", "PATCH", "DELETE").maxAge(MAX_AGE_SECS)
-				.allowedHeaders("*")
-				.allowCredentials(true);
+		registry.addMapping("/**").allowedOrigins("*")
+				.allowedMethods("HEAD", "OPTIONS", "GET", "POST", "PUT", "PATCH", "DELETE").maxAge(MAX_AGE_SECS);
+				//.allowedHeaders("*")
+				//.allowCredentials(true);
 	}
 }
