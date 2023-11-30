@@ -264,6 +264,10 @@ public class RoomServiceImpl implements RoomService {
 		Reservation reservation = reservationRepository.findByReservationID(reservationId)
 				.orElseThrow(() -> new RecordNotFoundException("Reservation Not Found with ID: " + reservationId));
 		
+		if (reservation.getCheckOut().isBefore(Instant.now())) {
+			throw new BadRequestException("Cannot find available rooms for past check out date!");
+		}
+		
 		List<Room> rooms = roomRepository.findAvailableRoomsByDate(Instant.now(), reservation.getCheckOut());
 		
 		return roomMapper.mapToDto(rooms);
@@ -286,12 +290,12 @@ public class RoomServiceImpl implements RoomService {
 		Room room = roomRepository.findById(roomId)
 				.orElseThrow(() -> new RecordNotFoundException("Room not found with ID: " + roomId));
 		
-		if (!roomRepository.findAvailableRoomsByDate(Instant.now(), reservation.getCheckOut()).contains(room)) {
+		if (!roomRepository.findAvailableRoomsByDate(Instant.now(), reservation.getCheckOut()).contains(room) 
+				|| !room.getStatus().equals(RoomStatus.AVAILABLE)) {
 			throw new BadRequestException("Room Unavailable! Please choose another room.");
 		}
 		room.setStatus(RoomStatus.OCCUPIED);
 		occupiedRoomService.setOccupiedRoom(reservation.getId(), room);
-		
 	}
 
 	@Override

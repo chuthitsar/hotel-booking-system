@@ -354,10 +354,12 @@ public class ReservationServiceImpl implements ReservationService {
 	@Override
 	public void checkReservationByID(String reservationId) {
 		
-		if (!reservationRepository.existsByReservationID(reservationId)) {
-			throw new RecordNotFoundException("Reservation Not Found with ID: " + reservationId);
+		Reservation reservation = reservationRepository.findByReservationID(reservationId)
+				.orElseThrow(() -> new RecordNotFoundException("Reservation Not Found with ID: " + reservationId));
+		
+		if (!reservation.getStatus().equals(ReservationStatus.CONFIRMED) && !reservation.getStatus().equals(ReservationStatus.COMPLETED)) {
+			throw new BadRequestException("Reservation is neither CONFIMRED nor COMPLETED! Cannot Change room!");
 		}
 	}
-
 
 }

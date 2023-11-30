@@ -43,7 +43,7 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
 			+ "and ((:month is null and :year is null) or (MONTH(r.createdAt) = :month and YEAR(r.createdAt) = :year)) "
 			+ "and (:reservationDate is null or DATE(r.createdAt) = DATE(:reservationDate)) "
 			+ "and (:checkIn is null or DATE(r.checkIn) = DATE(:checkIn)) "
-			+ "and (:checkOut is null or DATE(r.checkOut) = DATE(:checkOut))")
+			+ "and (:checkOut is null or DATE(r.checkOut) = DATE(:checkOut))" + " order by r.id desc" )
 	List<Reservation> findWithFilters( 
 			@Param("month") Integer month,
 			@Param("year") Integer year,
