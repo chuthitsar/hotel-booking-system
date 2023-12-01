@@ -151,13 +151,17 @@ public class ReservedRoomServiceImpl implements ReservedRoomService {
 		Room room = reservedRoom.getRoom();
 		ReservationStatus reservationStatus = reservedRoom.getReservation().getStatus();
 		
-		if (!reservationStatus.equals(ReservationStatus.COMPLETED)) {
-			if (reservationStatus.equals(ReservationStatus.CONFIRMED)) {
-				reservedRoom.getReservation().setStatus(ReservationStatus.COMPLETED);
-			} else {
-				throw new BadRequestException("The reservation is currently not CONFIRMED. Cannot Check In!");
-			}
+		if (!reservationStatus.equals(ReservationStatus.CONFIRMED)) {
+			throw new BadRequestException("The reservation is currently not CONFIRMED. Cannot Check In!");
 		}
+		
+//		if (!reservationStatus.equals(ReservationStatus.COMPLETED)) {
+//			if (reservationStatus.equals(ReservationStatus.CONFIRMED)) {
+//				reservedRoom.getReservation().setStatus(ReservationStatus.COMPLETED);
+//			} else {
+//				throw new BadRequestException("The reservation is currently not CONFIRMED. Cannot Check In!");
+//			}
+//		}
 		
 		if (!room.getStatus().equals(RoomStatus.AVAILABLE)) {
 			throw new BadRequestException("The room is currently unavailable!");
@@ -186,7 +190,20 @@ public class ReservedRoomServiceImpl implements ReservedRoomService {
 		}
 		reservedRoom.setStatus(ReservedRoomStatus.CANCELED);
 
-		reservedRoomRepository.save(reservedRoom);
+		ReservedRoom updatedReservedRoom = reservedRoomRepository.save(reservedRoom);
+		
+		List<ReservedRoom> reservedRooms = updatedReservedRoom.getReservation().getReservedRooms();
+		boolean isCompleted = true;
+		for (ReservedRoom eachReservedRoom: reservedRooms) {
+			if (eachReservedRoom.getStatus().equals(ReservedRoomStatus.PENDING)
+					|| eachReservedRoom.getStatus().equals(ReservedRoomStatus.CONFIRMED)) {
+				isCompleted = false;
+				break;
+			}
+		}
+		if (isCompleted) {
+			updatedReservedRoom.getReservation().setStatus(ReservationStatus.COMPLETED);
+		}
 	}
 
 }

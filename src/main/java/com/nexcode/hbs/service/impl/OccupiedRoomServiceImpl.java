@@ -106,7 +106,20 @@ public class OccupiedRoomServiceImpl implements OccupiedRoomService {
 		occupiedRoom.setStatus(OccupiedRoomStatus.CHECKED_IN);
 		occupiedRoom.setIsCompleted(false);
 		
-		reservation.setStatus(ReservationStatus.COMPLETED);
+		if (!reservation.getStatus().equals(ReservationStatus.COMPLETED)) {
+			List<ReservedRoom> reservedRooms = reservation.getReservedRooms();
+			boolean isCompleted = true;
+			for (ReservedRoom eachReservedRoom: reservedRooms) {
+				if (eachReservedRoom.getStatus().equals(ReservedRoomStatus.PENDING)
+						|| eachReservedRoom.getStatus().equals(ReservedRoomStatus.CONFIRMED)) {
+					isCompleted = false;
+					break;
+				}
+			}
+			if (isCompleted) {
+				reservation.setStatus(ReservationStatus.COMPLETED);
+			}
+		}
 		
 		occupiedRoomRepository.save(occupiedRoom);
 	}

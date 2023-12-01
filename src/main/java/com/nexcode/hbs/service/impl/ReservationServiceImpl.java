@@ -114,20 +114,19 @@ public class ReservationServiceImpl implements ReservationService {
 	
 	@Transactional
 	private boolean assignRooms(List<String> selectedRooms, Reservation reservation) {
-		System.out.println("assignRooms count");
+		
 		for (String roomType : selectedRooms) {
-			System.out.println("Before Getting Available rooms!");
+			
 			Pageable pageable = PageRequest.of(0, 1);
 			List<Room> rooms = roomRepository.findFirstAvailableRoomsByTypeAndDateWithLock(roomType, reservation.getCheckIn(),
 					reservation.getCheckOut(), pageable);
-			System.out.println("Getting Available rooms!");
+
 			if (rooms.isEmpty()) {
 				throw new BadRequestException("The selected room is not available anymore. Reservation Failed!");
 			} else {
 				ReservedRoom reservedRoom = new ReservedRoom();
 				try {
 					Room room = rooms.get(0);
-					System.out.println(room.getId());
 					
 					reservedRoom.setRoom(room);
 					reservedRoom.setReservation(reservation);
@@ -138,10 +137,6 @@ public class ReservationServiceImpl implements ReservationService {
 					
 					reservedRoomRepository.save(reservedRoom);
 					reservedRoomRepository.flush();
-					
-					System.out.println(reservation.getId());
-					System.out.println(room.getId());
-					System.out.println("save reserved room");
 					
 				} catch (OptimisticLockException | ObjectOptimisticLockingFailureException e) {
 					try {
@@ -357,7 +352,8 @@ public class ReservationServiceImpl implements ReservationService {
 		Reservation reservation = reservationRepository.findByReservationID(reservationId)
 				.orElseThrow(() -> new RecordNotFoundException("Reservation Not Found with ID: " + reservationId));
 		
-		if (!reservation.getStatus().equals(ReservationStatus.CONFIRMED) && !reservation.getStatus().equals(ReservationStatus.COMPLETED)) {
+		if (!reservation.getStatus().equals(ReservationStatus.CONFIRMED) 
+				&& !reservation.getStatus().equals(ReservationStatus.COMPLETED)) {
 			throw new BadRequestException("Reservation is neither CONFIMRED nor COMPLETED! Cannot Change room!");
 		}
 	}

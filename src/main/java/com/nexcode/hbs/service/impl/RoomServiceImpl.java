@@ -279,19 +279,16 @@ public class RoomServiceImpl implements RoomService {
 		Reservation reservation = reservationRepository.findByReservationID(reservationId)
 				.orElseThrow(() -> new RecordNotFoundException("Reservation Not Found with ID: " + reservationId));
 		
-		if (!reservation.getStatus().equals(ReservationStatus.COMPLETED)) {
-			if (reservation.getStatus().equals(ReservationStatus.CONFIRMED)) {
-				reservation.setStatus(ReservationStatus.COMPLETED);
-			} else {
-				throw new BadRequestException("Cannot check in the room! The reservation is not confirmed yet.");
-			}
+		if (!reservation.getStatus().equals(ReservationStatus.CONFIRMED) 
+				&& !reservation.getStatus().equals(ReservationStatus.COMPLETED)) {
+			throw new BadRequestException("Reservation is neither CONFIMRED nor COMPLETED! Cannot Change room!");
 		}
 		
 		Room room = roomRepository.findById(roomId)
 				.orElseThrow(() -> new RecordNotFoundException("Room not found with ID: " + roomId));
 		
 		if (!roomRepository.findAvailableRoomsByDate(Instant.now(), reservation.getCheckOut()).contains(room) 
-				|| !room.getStatus().equals(RoomStatus.AVAILABLE)) {
+				&& !room.getStatus().equals(RoomStatus.AVAILABLE)) {
 			throw new BadRequestException("Room Unavailable! Please choose another room.");
 		}
 		room.setStatus(RoomStatus.OCCUPIED);
