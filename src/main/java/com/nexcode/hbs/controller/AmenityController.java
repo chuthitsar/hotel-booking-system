@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.nexcode.hbs.model.dto.AmenityDto;
 import com.nexcode.hbs.model.mapper.AmenityMapper;
+import com.nexcode.hbs.model.request.AmenityRequest;
 import com.nexcode.hbs.model.response.AmenityResponse;
 import com.nexcode.hbs.model.response.ApiResponse;
 import com.nexcode.hbs.service.AmenityService;
@@ -31,15 +32,15 @@ public class AmenityController {
 	private final AmenityMapper amenityMapper;
 	
 	@PostMapping
-	public ResponseEntity<ApiResponse> createAmenity(@RequestBody AmenityDto amenityDto){
-		amenityService.createAmentiy(amenityDto);
-		return new ResponseEntity<>(new ApiResponse(true, "Amenity created successfully"), HttpStatus.CREATED);
+	public ResponseEntity<ApiResponse> createAmenity(@RequestBody AmenityRequest amenityRequest){
+		amenityService.createAmentiy(amenityMapper.mapToDto(amenityRequest));
+		return new ResponseEntity<>(new ApiResponse(true, "Amenity created successfully!"), HttpStatus.CREATED);
 	}
 	
 	@PutMapping("/{id}")
-	public ResponseEntity<ApiResponse> updateAmenity(@PathVariable Long id, @RequestBody AmenityDto amenityDto) {
-		amenityService.updateAmenity(id, amenityDto);
-		return new ResponseEntity<>(new ApiResponse(true, "Amenity updated successfully"), HttpStatus.OK);
+	public ResponseEntity<ApiResponse> updateAmenity(@PathVariable Long id, @RequestBody AmenityRequest amenityRequest) {
+		amenityService.updateAmenity(id, amenityMapper.mapToDto(amenityRequest));
+		return new ResponseEntity<>(new ApiResponse(true, "Amenity updated successfully!"), HttpStatus.OK);
 	}
 	
 	@GetMapping

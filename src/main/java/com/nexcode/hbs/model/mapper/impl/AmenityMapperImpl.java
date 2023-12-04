@@ -8,11 +8,26 @@ import org.springframework.stereotype.Component;
 import com.nexcode.hbs.model.dto.AmenityDto;
 import com.nexcode.hbs.model.entity.Amenity;
 import com.nexcode.hbs.model.mapper.AmenityMapper;
+import com.nexcode.hbs.model.request.AmenityRequest;
 import com.nexcode.hbs.model.response.AmenityResponse;
 
 @Component
 public class AmenityMapperImpl implements AmenityMapper {
 
+	@Override
+	public AmenityDto mapToDto(AmenityRequest amenityRequest) {
+		if (amenityRequest == null) {
+			return null;
+		}
+
+		// Mapping
+		AmenityDto amenityDto = new AmenityDto();
+		amenityDto.setName(amenityRequest.getName());
+		amenityDto.setIcon(amenityRequest.getIcon());
+
+		return amenityDto;
+	}
+	
 	@Override
 	public AmenityDto mapToDto(Amenity amenity) {
 		if (amenity == null) {

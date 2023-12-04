@@ -41,11 +41,12 @@ public class AmenityServiceImpl implements AmenityService{
 	public AmenityDto createAmentiy(AmenityDto amenityDto) {
 		
 		if (amenityRepository.existsByName(amenityDto.getName())) {
-            throw new DuplicateEntityException("Amenity with the same name already exists");
+            throw new DuplicateEntityException("An amenity with the same name already exists!");
         }
 
         Amenity amenity = new Amenity();
         amenity.setName(amenityDto.getName());
+        amenity.setIcon(amenityDto.getIcon());
         Amenity createdAmenity = amenityRepository.save(amenity);
         AmenityDto createdAmenityDto = amenityMapper.mapToDto(createdAmenity);
         
