@@ -306,6 +306,7 @@ public class RoomServiceImpl implements RoomService {
 	public Long countOccupiedRooms() {
 		
 		Long roomCount = roomRepository.countByStatus(RoomStatus.OCCUPIED);
+		System.out.println("hello this is testing");
 		return roomCount;
 	}
 
