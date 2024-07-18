@@ -37,7 +37,7 @@ public class SecurityConfig {
 												"/api/auth/admin/reset-password").permitAll()
 									.antMatchers(HttpMethod.GET, "/api/amenities/**", "/api/room-types/**").permitAll()
 									.antMatchers(HttpMethod.POST, "/api/room-types/availability", "/api/reservations/**").permitAll()
-									.antMatchers("/error").permitAll()
+									.antMatchers("/error", "/actuator/**").permitAll()
 									.anyRequest().authenticated().and()
 						.exceptionHandling().authenticationEntryPoint(entryPoint).and().sessionManagement()
 						.sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
