@@ -38,6 +38,16 @@ public class SecurityConfig {
 									.antMatchers(HttpMethod.GET, "/api/amenities/**", "/api/room-types/**").permitAll()
 									.antMatchers(HttpMethod.POST, "/api/room-types/availability", "/api/reservations/**").permitAll()
 									.antMatchers("/error", "/actuator/**").permitAll()
+									.antMatchers("/v2/api-docs",
+															"/v3/api-docs",
+															"/v3/api-docs/**",
+															"/swagger-resources",
+															"/swagger-resources/**",
+															"/configuration/ui",
+															"/configuration/security",
+															"/swagger-ui/**",
+															"/webjars/**",
+															"/swagger-ui.html").permitAll()
 									.anyRequest().authenticated().and()
 						.exceptionHandling().authenticationEntryPoint(entryPoint).and().sessionManagement()
 						.sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
